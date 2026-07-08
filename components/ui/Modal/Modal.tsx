@@ -1,0 +1,67 @@
+"use client";
+
+import Dialog, { type DialogProps } from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import { X } from "lucide-react";
+import { type ReactNode, useId } from "react";
+
+import { cn } from "@/utils/cn";
+
+export interface ModalProps extends Omit<DialogProps, "children" | "onClose" | "open" | "title"> {
+  actions?: ReactNode;
+  children: ReactNode;
+  closeLabel?: string;
+  onClose: () => void;
+  open: boolean;
+  title: ReactNode;
+}
+
+export function Modal({
+  actions,
+  children,
+  className,
+  closeLabel = "Close dialog",
+  maxWidth = "sm",
+  onClose,
+  open,
+  title,
+  ...props
+}: ModalProps) {
+  const titleId = useId();
+
+  return (
+    <Dialog
+      aria-labelledby={titleId}
+      className={className}
+      fullWidth
+      maxWidth={maxWidth}
+      onClose={onClose}
+      open={open}
+      {...props}
+    >
+      <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-6 py-4">
+        <DialogTitle className="p-0 text-lg font-semibold text-slate-950" id={titleId}>
+          {title}
+        </DialogTitle>
+        <IconButton
+          aria-label={closeLabel}
+          className="h-9 w-9 rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950"
+          onClick={onClose}
+          type="button"
+        >
+          <X aria-hidden="true" className="h-5 w-5" />
+        </IconButton>
+      </div>
+
+      <DialogContent className={cn("px-6 py-5 text-slate-700")}>{children}</DialogContent>
+      {actions ? (
+        <DialogActions className="gap-2 border-t border-slate-200 px-6 py-4">
+          {actions}
+        </DialogActions>
+      ) : null}
+    </Dialog>
+  );
+}

@@ -1,6 +1,8 @@
 "use client";
 
+import InputAdornment from "@mui/material/InputAdornment";
 import Paper from "@mui/material/Paper";
+import Skeleton from "@mui/material/Skeleton";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -21,6 +23,7 @@ import {
   type RowData,
   type SortingState,
 } from "@tanstack/react-table";
+import { Search } from "lucide-react";
 import { useState } from "react";
 
 import type { DataTableProps } from "./types";
@@ -65,10 +68,10 @@ export function DataTable<TData extends RowData>({
   const rowCount = table.getFilteredRowModel().rows.length;
 
   return (
-    <Paper className="overflow-hidden rounded-md border border-slate-200 shadow-none">
-      <div className="border-b border-slate-200 p-4">
+    <Paper className="overflow-hidden" variant="outlined">
+      <div className="flex flex-col gap-3 border-b border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
         <TextField
-          className="max-w-sm"
+          className="max-w-md"
           fullWidth
           label={globalFilterPlaceholder}
           onChange={(event) => {
@@ -76,20 +79,33 @@ export function DataTable<TData extends RowData>({
             setGlobalFilter(event.target.value);
           }}
           size="small"
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search aria-hidden="true" size={17} strokeWidth={1.8} />
+                </InputAdornment>
+              ),
+            },
+          }}
+          placeholder={globalFilterPlaceholder}
           value={globalFilter}
         />
+        <span className="text-xs font-medium text-slate-500">
+          {rowCount} {rowCount === 1 ? "record" : "records"}
+        </span>
       </div>
 
       <TableContainer>
-        <Table size="small">
-          <TableHead className="bg-slate-50">
+        <Table aria-busy={isLoading} size="small">
+          <TableHead className="bg-slate-50/80">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const sortDirection = header.column.getIsSorted();
 
                   return (
-                    <TableCell className="font-semibold text-slate-700" key={header.id}>
+                    <TableCell key={header.id}>
                       {header.isPlaceholder ? null : (
                         <TableSortLabel
                           active={Boolean(sortDirection)}
@@ -110,8 +126,13 @@ export function DataTable<TData extends RowData>({
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell className="py-8 text-center text-slate-600" colSpan={visibleColumns}>
-                  Loading data...
+                <TableCell colSpan={visibleColumns} role="status">
+                  <span className="sr-only">Loading data...</span>
+                  <div className="grid gap-3 py-3" aria-hidden="true">
+                    <Skeleton height={18} variant="rounded" width="92%" />
+                    <Skeleton height={18} variant="rounded" width="74%" />
+                    <Skeleton height={18} variant="rounded" width="84%" />
+                  </div>
                 </TableCell>
               </TableRow>
             ) : null}
@@ -119,7 +140,7 @@ export function DataTable<TData extends RowData>({
             {!isLoading && error ? (
               <TableRow>
                 <TableCell
-                  className="py-8 text-center text-red-700"
+                  className="py-10 text-center text-red-700"
                   colSpan={visibleColumns}
                   role="alert"
                 >
@@ -131,7 +152,7 @@ export function DataTable<TData extends RowData>({
             {!isLoading && !error && table.getRowModel().rows.length === 0 ? (
               <TableRow>
                 <TableCell
-                  className="py-8 text-center text-slate-600"
+                  className="py-10 text-center text-slate-600"
                   colSpan={visibleColumns}
                   role="status"
                 >
@@ -144,7 +165,7 @@ export function DataTable<TData extends RowData>({
               ? table.getRowModel().rows.map((row) => (
                   <TableRow data-testid="data-table-row" hover key={row.id}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell className="text-slate-700" key={cell.id}>
+                      <TableCell key={cell.id}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}

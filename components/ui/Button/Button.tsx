@@ -13,12 +13,11 @@ export interface ButtonProps extends Omit<MuiButtonProps, "variant"> {
   variant?: ButtonVariant;
 }
 
-const variantClasses: Record<ButtonVariant, string> = {
-  ghost: "bg-transparent text-slate-700 shadow-none hover:bg-slate-100",
-  outline:
-    "border border-slate-300 bg-white text-slate-950 shadow-none hover:border-slate-400 hover:bg-slate-50",
-  solid: "bg-slate-950 text-white shadow-none hover:bg-slate-800",
-  text: "bg-transparent px-2 text-slate-700 shadow-none hover:bg-slate-100",
+const muiVariant: Record<ButtonVariant, MuiButtonProps["variant"]> = {
+  ghost: "text",
+  outline: "outlined",
+  solid: "contained",
+  text: "text",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -27,11 +26,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => (
     <MuiButton
-      className={cn(
-        "min-h-10 rounded-md px-4 text-sm font-semibold normal-case",
-        variantClasses[variant],
-        className,
-      )}
+      className={cn("text-sm", className)}
+      color={props.color ?? (variant === "ghost" || variant === "text" ? "secondary" : "primary")}
       disabled={disabled || isLoading}
       ref={ref}
       startIcon={
@@ -45,7 +41,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           startIcon
         )
       }
-      variant={variant === "outline" ? "outlined" : "contained"}
+      sx={
+        variant === "ghost"
+          ? { "&:hover": { bgcolor: "action.hover" } }
+          : variant === "text"
+            ? { minWidth: "auto", px: 2 }
+            : undefined
+      }
+      variant={muiVariant[variant]}
       {...props}
     >
       {children}

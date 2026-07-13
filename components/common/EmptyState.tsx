@@ -12,9 +12,16 @@ export interface EmptyStateProps {
 export function EmptyState({ action, description, icon, title }: EmptyStateProps) {
   return (
     <Stack
-      className="items-start rounded-xl border border-dashed border-slate-300 bg-slate-50/80 p-6 sm:p-8"
+      className="items-start"
       role="status"
       spacing={3}
+      sx={{
+        bgcolor: "action.hover",
+        border: "1px dashed",
+        borderColor: "divider",
+        borderRadius: 4,
+        p: { xs: 6, sm: 8 },
+      }}
     >
       {icon ? (
         <span className="grid size-10 place-items-center rounded-lg bg-teal-50 text-teal-700">

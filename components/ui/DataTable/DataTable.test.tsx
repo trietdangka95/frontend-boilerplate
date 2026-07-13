@@ -71,9 +71,11 @@ describe("DataTable", () => {
     const { rerender } = render(<DataTable columns={columns} data={[]} isLoading />);
 
     expect(screen.getByText("Loading data...")).toBeInTheDocument();
+    expect(screen.getByRole("table")).toHaveAttribute("aria-busy", "true");
 
     rerender(<DataTable columns={columns} data={[]} />);
 
     expect(screen.getByText("No records found.")).toBeInTheDocument();
+    expect(screen.getByRole("table")).toHaveAttribute("aria-busy", "false");
   });
 });

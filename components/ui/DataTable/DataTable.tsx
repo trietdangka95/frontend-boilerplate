@@ -66,6 +66,9 @@ export function DataTable<TData extends RowData>({
 
   const visibleColumns = table.getAllLeafColumns().length || 1;
   const rowCount = table.getFilteredRowModel().rows.length;
+  const resolvedPageSizeOptions = pageSizeOptions.includes(initialPageSize)
+    ? pageSizeOptions
+    : [initialPageSize, ...pageSizeOptions].sort((first, second) => first - second);
 
   return (
     <Paper className="overflow-hidden" variant="outlined">
@@ -185,7 +188,7 @@ export function DataTable<TData extends RowData>({
         }}
         page={pagination.pageIndex}
         rowsPerPage={pagination.pageSize}
-        rowsPerPageOptions={pageSizeOptions}
+        rowsPerPageOptions={resolvedPageSizeOptions}
       />
     </Paper>
   );

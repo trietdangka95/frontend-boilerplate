@@ -67,6 +67,16 @@ describe("DataTable", () => {
     expect(screen.queryByText("Zeta")).not.toBeInTheDocument();
   });
 
+  it("keeps a custom initial page size available in the pagination control", async () => {
+    const user = userEvent.setup();
+
+    render(<DataTable columns={columns} data={rows} initialPageSize={3} />);
+
+    await user.click(screen.getByRole("combobox", { name: "Rows per page:" }));
+
+    expect(await screen.findByRole("option", { name: "3" })).toBeInTheDocument();
+  });
+
   it("renders loading and empty states", () => {
     const { rerender } = render(<DataTable columns={columns} data={[]} isLoading />);
 

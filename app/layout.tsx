@@ -6,11 +6,11 @@ import { AppProviders } from "./providers";
 
 export const metadata: Metadata = {
   title: {
-    default: "Enterprise Frontend Boilerplate",
-    template: "%s | Enterprise Frontend Boilerplate",
+    default: "Northstar UI Boilerplate",
+    template: "%s | Northstar UI Boilerplate",
   },
   description:
-    "A production-ready Next.js App Router foundation for enterprise frontend applications.",
+    "A production-ready Next.js, MUI, and Tailwind design-system foundation for enterprise applications.",
 };
 
 interface RootLayoutProps {

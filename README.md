@@ -34,6 +34,7 @@ The app runs on [http://localhost:3000](http://localhost:3000) by default.
 |-- app/                  # App Router routes, providers, and route fallbacks
 |-- components/
 |   |-- common/           # Cross-app common UI such as toast provider
+|   |-- layout/           # Responsive app shell and page-level composition
 |   `-- ui/               # Reusable base UI primitives
 |-- features/
 |   `-- example/          # Example feature-local components, hooks, schemas, services, types
@@ -42,7 +43,7 @@ The app runs on [http://localhost:3000](http://localhost:3000) by default.
 |   |-- api/              # Axios client, error normalization, auth refresh helpers
 |   `-- query/            # TanStack Query client setup
 |-- stores/               # Zustand client UI state
-|-- theme/                # MUI theme
+|-- theme/                # Semantic tokens and MUI theme overrides
 |-- types/                # Shared TypeScript contracts
 |-- utils/                # Shared utilities and env validation
 |-- docs/                 # Specs and implementation plans
@@ -113,13 +114,43 @@ Reusable components should:
 
 Current base primitives include:
 
+- `AppShell`, `PageContainer`, and `PageHeader`
 - `Button`
 - `Modal`
 - `InputField`
 - `SelectBox`
 - `CheckboxField`
 - `DataTable`
+- `StatusChip`
+- `EmptyState`
 - `AppToastProvider` and `appToast`
+
+### Design tokens
+
+`theme/tokens.ts` is the source of truth for brand color, neutral color, spacing, radius, motion, shadow, and layout values. `theme/theme.ts` maps those tokens into MUI so components share focus, hover, active, disabled, error, and responsive states.
+
+- Brand accent: restrained teal; semantic feedback colors remain separate.
+- Typography: Avenir Next with Segoe UI and system fallbacks; no runtime font request.
+- Spacing: 4 px base unit.
+- Breakpoints: `sm` 600, `md` 768, `lg` 1024, `xl` 1440.
+- Content width: 1280 px with responsive 16/24/32 px page gutters.
+- Full-height layouts use `100dvh` to avoid mobile browser viewport jumps.
+
+Import layout and status primitives from their public barrels:
+
+```tsx
+import { AppShell, PageContainer, PageHeader } from "@/components/layout";
+import { StatusChip } from "@/components/ui/StatusChip";
+
+<AppShell brand="Product" navigation={navigation}>
+  <PageContainer>
+    <PageHeader title="Workspace" description="Current activity and controls." />
+    <StatusChip label="Active" tone="success" />
+  </PageContainer>
+</AppShell>;
+```
+
+The home route is a living reference for the palette, type hierarchy, component variants, responsive shell, form validation, query loading state, table interactions, and modal details.
 
 ## Forms
 

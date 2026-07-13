@@ -13,5 +13,10 @@ describe("HomePage", () => {
     );
 
     expect(screen.getByRole("heading", { name: "Example workspace" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Design system foundation" })).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "Overview" })[0]).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
   });
 });

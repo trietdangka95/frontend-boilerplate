@@ -1,7 +1,9 @@
 "use client";
 
-import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+
+import { Button } from "@/components/ui/Button";
 
 interface ErrorPageProps {
   error: Error & { digest?: string };
@@ -10,10 +12,17 @@ interface ErrorPageProps {
 
 export default function ErrorPage({ error, reset }: ErrorPageProps) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6 py-12 text-slate-950">
-      <section className="flex w-full max-w-xl flex-col items-start gap-6 rounded-md border border-slate-200 bg-white p-6">
+    <main className="flex min-h-[100dvh] items-center justify-center bg-slate-50 px-4 py-12 text-slate-950 sm:px-6">
+      <Paper
+        className="flex w-full max-w-xl flex-col items-start gap-6 p-6 sm:p-8"
+        component="section"
+        variant="outlined"
+      >
         <div className="space-y-2">
-          <Typography component="h1" variant="h4">
+          <Typography color="primary.main" sx={{ fontWeight: 750 }} variant="body2">
+            Recoverable route error
+          </Typography>
+          <Typography component="h1" variant="h2">
             Something went wrong
           </Typography>
           <Typography className="text-slate-600" variant="body1">
@@ -26,14 +35,8 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
           ) : null}
         </div>
 
-        <Button
-          className="rounded-md bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
-          onClick={reset}
-          variant="contained"
-        >
-          Try again
-        </Button>
-      </section>
+        <Button onClick={reset}>Try again</Button>
+      </Paper>
     </main>
   );
 }

@@ -64,7 +64,7 @@ export function DashboardOverview() {
         </Box>
       </Paper>
 
-      <Box id="components">
+      <Box>
         <Box sx={{ maxWidth: 680 }}>
           <Typography component="h2" variant="h2">
             Design system foundation

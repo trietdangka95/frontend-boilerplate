@@ -6,6 +6,7 @@ import { StatusChip } from "@/components/ui/StatusChip";
 
 import { DashboardOverview } from "./DashboardOverview";
 import { DashboardTopbarActions } from "./DashboardTopbarActions";
+import { ComponentShowcase } from "./ComponentShowcase";
 import { RecordWorkspace } from "./RecordWorkspace";
 
 const iconProps = { size: 19, strokeWidth: 1.8 } as const;
@@ -73,6 +74,7 @@ export function ExampleDashboard() {
           />
 
           <DashboardOverview />
+          <ComponentShowcase />
           <RecordWorkspace />
         </div>
       </PageContainer>

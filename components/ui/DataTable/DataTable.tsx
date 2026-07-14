@@ -2,7 +2,6 @@
 
 import InputAdornment from "@mui/material/InputAdornment";
 import Paper from "@mui/material/Paper";
-import Skeleton from "@mui/material/Skeleton";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -25,6 +24,8 @@ import {
 } from "@tanstack/react-table";
 import { Search } from "lucide-react";
 import { useState } from "react";
+
+import { LoadingState } from "@/components/ui/LoadingState";
 
 import type { DataTableProps } from "./types";
 
@@ -129,13 +130,8 @@ export function DataTable<TData extends RowData>({
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={visibleColumns} role="status">
-                  <span className="sr-only">Loading data...</span>
-                  <div className="grid gap-3 py-3" aria-hidden="true">
-                    <Skeleton height={18} variant="rounded" width="92%" />
-                    <Skeleton height={18} variant="rounded" width="74%" />
-                    <Skeleton height={18} variant="rounded" width="84%" />
-                  </div>
+                <TableCell colSpan={visibleColumns}>
+                  <LoadingState className="py-3" label="Loading data..." />
                 </TableCell>
               </TableRow>
             ) : null}

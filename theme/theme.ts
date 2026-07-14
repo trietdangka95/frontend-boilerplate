@@ -103,6 +103,14 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           fontWeight: 550,
+          "&.MuiInputLabel-outlined.MuiInputLabel-shrink": {
+            backgroundColor: neutral[0],
+            paddingInline: 4,
+            transform: "translate(11px, -9px) scale(0.75)",
+          },
+          "&.MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
+            transform: "translate(14px, 11px) scale(1)",
+          },
         },
       },
     },

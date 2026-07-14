@@ -296,7 +296,309 @@ package.json and config files
 
 **Estimated scope:** Medium
 
-## Task 10: Build DataTable primitive
+**Implementation status (2026-07-15):** Tasks 10-21 are complete. Component tests, the full test suite, lint, formatting, typecheck, and the production build pass.
+
+## Task 10: Add IconButton primitive
+
+**Description:** Add a public icon-only action primitive so toolbars, table actions, and dismiss controls share sizing, focus, loading, and accessibility behavior.
+
+**Acceptance criteria:**
+
+- [ ] IconButton supports semantic color and size variants, disabled/loading states, `className`, prop spread, and ref forwarding.
+- [ ] Icon-only actions require an accessible name through `aria-label` or equivalent visible labeling.
+- [ ] Focus, hover, active, and loading presentation uses shared theme tokens.
+
+**Verification:**
+
+- [ ] Add component tests for accessible naming, loading, disabled, and prop forwarding.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4
+
+**Files likely touched:**
+
+- `components/ui/IconButton/IconButton.tsx`
+- `components/ui/IconButton/IconButton.test.tsx`
+- `components/ui/IconButton/index.ts`
+
+**Estimated scope:** Small
+
+## Task 11: Add ConfirmDialog primitive
+
+**Description:** Add a focused confirmation flow for destructive or consequential actions by composing the existing Modal, Button, and IconButton primitives.
+
+**Acceptance criteria:**
+
+- [ ] ConfirmDialog supports confirm/cancel labels, destructive intent, async loading, error-safe retry, and disabled dismissal while confirming when requested.
+- [ ] Initial focus, Escape behavior, cancel behavior, and focus restoration are predictable and accessible.
+- [ ] Consumers can provide title, description, and optional supporting content without rebuilding dialog actions.
+
+**Verification:**
+
+- [ ] Add tests for confirm, cancel, loading, Escape, and focus restoration behavior.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 8, 10
+
+**Files likely touched:**
+
+- `components/ui/ConfirmDialog/ConfirmDialog.tsx`
+- `components/ui/ConfirmDialog/ConfirmDialog.test.tsx`
+- `components/ui/ConfirmDialog/index.ts`
+
+**Estimated scope:** Medium
+
+## Task 12: Add DropdownMenu and ActionMenu primitives
+
+**Description:** Add composable menu primitives for compact row actions, overflow actions, and toolbar commands without coupling menu content to a single feature.
+
+**Acceptance criteria:**
+
+- [ ] DropdownMenu exposes accessible trigger, content, item, separator, disabled, and destructive-item patterns.
+- [ ] Keyboard navigation, Escape, click-away dismissal, focus return, and item selection follow expected menu behavior.
+- [ ] ActionMenu provides a small convenience composition for common overflow-action use without duplicating DropdownMenu logic.
+
+**Verification:**
+
+- [ ] Add interaction tests for keyboard navigation, selection, disabled items, dismissal, and focus return.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4, 10
+
+**Files likely touched:**
+
+- `components/ui/DropdownMenu/DropdownMenu.tsx`
+- `components/ui/DropdownMenu/DropdownMenu.test.tsx`
+- `components/ui/DropdownMenu/index.ts`
+
+**Estimated scope:** Medium
+
+## Task 13: Add Tabs primitive
+
+**Description:** Add reusable tabs and tab panels for switching between related dashboard views while preserving accessible state and keyboard behavior.
+
+**Acceptance criteria:**
+
+- [ ] Tabs supports controlled and uncontrolled selection, disabled tabs, and stable tab-to-panel relationships.
+- [ ] Arrow keys, Home, End, focus order, and ARIA attributes follow the tabs interaction pattern.
+- [ ] Tabs accepts responsive styling and relevant MUI props without hiding the underlying composition model.
+
+**Verification:**
+
+- [ ] Add tests for selection, keyboard navigation, disabled tabs, and ARIA relationships.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4
+
+**Files likely touched:**
+
+- `components/ui/Tabs/Tabs.tsx`
+- `components/ui/Tabs/Tabs.test.tsx`
+- `components/ui/Tabs/index.ts`
+
+**Estimated scope:** Medium
+
+## Task 14: Add Breadcrumbs primitive
+
+**Description:** Add route-context breadcrumbs for nested dashboard pages with a consistent separator, current-page treatment, and overflow behavior.
+
+**Acceptance criteria:**
+
+- [ ] Breadcrumbs renders linked ancestors and a non-linked current item with `aria-current="page"`.
+- [ ] Long paths support responsive collapsing while retaining accessible labels and full destination links.
+- [ ] Separators are decorative and the component accepts `className` and relevant MUI props.
+
+**Verification:**
+
+- [ ] Add tests for links, current-page semantics, custom separators, and collapsed paths.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4
+
+**Files likely touched:**
+
+- `components/ui/Breadcrumbs/Breadcrumbs.tsx`
+- `components/ui/Breadcrumbs/Breadcrumbs.test.tsx`
+- `components/ui/Breadcrumbs/index.ts`
+
+**Estimated scope:** Small
+
+## Task 15: Add RadioGroupField primitive
+
+**Description:** Add a radio group field that follows the existing form wrapper contract for both uncontrolled forms and React Hook Form Controller usage.
+
+**Acceptance criteria:**
+
+- [ ] RadioGroupField supports typed options, disabled states, row/column layout, helper text, and validation errors.
+- [ ] Uncontrolled and Controller-based usage preserve label, description, error, and group associations.
+- [ ] The component accepts `className`, relevant MUI props, and forwards field behavior consistently with existing form primitives.
+
+**Verification:**
+
+- [ ] Add tests for selection, labels, validation errors, disabled options, and React Hook Form submission.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4, 9
+
+**Files likely touched:**
+
+- `components/ui/RadioGroupField/RadioGroupField.tsx`
+- `components/ui/RadioGroupField/RadioGroupField.test.tsx`
+- `components/ui/RadioGroupField/index.ts`
+
+**Estimated scope:** Medium
+
+## Task 16: Add SwitchField primitive
+
+**Description:** Add a switch field for immediate boolean settings while keeping checkbox semantics available for form acknowledgement and multi-select cases.
+
+**Acceptance criteria:**
+
+- [ ] SwitchField supports uncontrolled and React Hook Form Controller usage, checked/defaultChecked state, disabled state, helper text, and validation errors.
+- [ ] Visible labels and descriptions are correctly associated with the switch and do not rely on color alone.
+- [ ] The component accepts `className`, relevant MUI props, and consistent error presentation.
+
+**Verification:**
+
+- [ ] Add tests for toggling, controlled submission, labels, helper text, errors, and disabled behavior.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4, 9
+
+**Files likely touched:**
+
+- `components/ui/SwitchField/SwitchField.tsx`
+- `components/ui/SwitchField/SwitchField.test.tsx`
+- `components/ui/SwitchField/index.ts`
+
+**Estimated scope:** Medium
+
+## Task 17: Add AutocompleteField and Combobox primitive
+
+**Description:** Add a typed autocomplete field for searchable single- or multi-value selection, including asynchronous option loading and React Hook Form integration.
+
+**Acceptance criteria:**
+
+- [ ] AutocompleteField supports generic option types, label/equality resolvers, single and multiple selection, loading, empty, disabled, and clearable states.
+- [ ] Uncontrolled and Controller-based usage display helper text and validation errors consistently.
+- [ ] Keyboard navigation, option selection, listbox labeling, and focus behavior remain accessible.
+
+**Verification:**
+
+- [ ] Add tests for filtering, keyboard selection, single/multiple values, loading/empty states, validation, and React Hook Form submission.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4, 9
+
+**Files likely touched:**
+
+- `components/ui/AutocompleteField/AutocompleteField.tsx`
+- `components/ui/AutocompleteField/AutocompleteField.test.tsx`
+- `components/ui/AutocompleteField/index.ts`
+
+**Estimated scope:** Medium
+
+## Task 18: Add InlineAlert primitive
+
+**Description:** Add in-content feedback for persistent success, information, warning, and error messages that should not be presented as transient toast notifications.
+
+**Acceptance criteria:**
+
+- [ ] InlineAlert supports semantic tones plus optional title, supporting content, action, and dismiss behavior.
+- [ ] Alert and status roles match urgency, dismiss controls have accessible names, and meaning is not conveyed by color alone.
+- [ ] The component accepts `className`, relevant MUI props, and shared theme tokens.
+
+**Verification:**
+
+- [ ] Add tests for tone, roles, title/content, action, dismiss behavior, and prop forwarding.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4, 10
+
+**Files likely touched:**
+
+- `components/ui/InlineAlert/InlineAlert.tsx`
+- `components/ui/InlineAlert/InlineAlert.test.tsx`
+- `components/ui/InlineAlert/index.ts`
+
+**Estimated scope:** Small
+
+## Task 19: Add reusable LoadingState primitive
+
+**Description:** Add a shared loading-state boundary that announces progress and accepts composed MUI Skeleton content, with a useful line-skeleton fallback for simple cases.
+
+**Acceptance criteria:**
+
+- [ ] LoadingState exposes accessible busy/status semantics and supports a customizable loading label.
+- [ ] Consumers can compose domain-appropriate skeleton layouts instead of being limited to one fixed card or table shape.
+- [ ] Motion respects reduced-motion preferences and does not cause avoidable layout shifts.
+
+**Verification:**
+
+- [ ] Add tests for default/custom skeleton content, accessible status, busy state, and custom labels.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4
+
+**Files likely touched:**
+
+- `components/ui/LoadingState/LoadingState.tsx`
+- `components/ui/LoadingState/LoadingState.test.tsx`
+- `components/ui/LoadingState/index.ts`
+
+**Estimated scope:** Small
+
+## Task 20: Add SectionCard primitive
+
+**Description:** Add a standard content surface for dashboard sections with consistent title, description, header actions, body spacing, and optional footer composition.
+
+**Acceptance criteria:**
+
+- [ ] SectionCard supports semantic heading levels, optional description, header actions, body content, and footer content.
+- [ ] Padding, border, radius, and responsive behavior use shared tokens while allowing focused `className` overrides.
+- [ ] The component remains compositional and does not encode feature-specific loading, empty, or form logic.
+
+**Verification:**
+
+- [ ] Add tests for heading semantics, header actions, body/footer composition, and prop forwarding.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4
+
+**Files likely touched:**
+
+- `components/ui/SectionCard/SectionCard.tsx`
+- `components/ui/SectionCard/SectionCard.test.tsx`
+- `components/ui/SectionCard/index.ts`
+
+**Estimated scope:** Small
+
+## Task 21: Add standalone Pagination primitive
+
+**Description:** Add pagination for card grids, search results, and other collections that do not use DataTable.
+
+**Acceptance criteria:**
+
+- [ ] Pagination supports controlled page state, total page count, disabled state, sibling/boundary configuration, and change callbacks.
+- [ ] Current-page and navigation controls have accessible labels and remain usable at narrow viewport widths.
+- [ ] The wrapper accepts `className` and relevant MUI Pagination props without duplicating table-specific state.
+
+**Verification:**
+
+- [ ] Add tests for page changes, current-page semantics, disabled state, responsive configuration, and prop forwarding.
+- [ ] Run `corepack pnpm test` and `corepack pnpm typecheck`.
+
+**Dependencies:** Tasks 3, 4
+
+**Files likely touched:**
+
+- `components/ui/Pagination/Pagination.tsx`
+- `components/ui/Pagination/Pagination.test.tsx`
+- `components/ui/Pagination/index.ts`
+
+**Estimated scope:** Small
+
+## Task 22: Build DataTable primitive
 
 **Description:** Create an advanced table that uses TanStack Table for logic and MUI Table for rendering.
 
@@ -311,7 +613,7 @@ package.json and config files
 - [ ] Add tests for sorting, filtering, pagination, empty state, and loading state.
 - [ ] Run `corepack pnpm test`.
 
-**Dependencies:** Tasks 3, 4
+**Dependencies:** Tasks 3, 4, 19, 21
 
 **Files likely touched:**
 
@@ -322,7 +624,7 @@ package.json and config files
 
 **Estimated scope:** Medium
 
-## Task 11: Add sample feature slice
+## Task 23: Add sample feature slice
 
 **Description:** Add a small example feature page that demonstrates Zod validation, RHF form fields, TanStack Query, Toast, Modal, and DataTable without adding product-specific assumptions.
 
@@ -337,7 +639,7 @@ package.json and config files
 - [ ] Run `corepack pnpm build`.
 - [ ] Manual check: page renders, form validation appears, table pagination works.
 
-**Dependencies:** Tasks 5, 8, 9, 10
+**Dependencies:** Tasks 5, 8-22
 
 **Files likely touched:**
 
@@ -354,10 +656,13 @@ package.json and config files
 
 - [ ] Base UI wrappers are complete.
 - [ ] Form fields integrate with React Hook Form.
+- [ ] IconButton, ConfirmDialog, DropdownMenu, Tabs, and Breadcrumbs cover common interaction and navigation patterns.
+- [ ] RadioGroupField, SwitchField, and AutocompleteField cover common selection controls.
+- [ ] InlineAlert, LoadingState, SectionCard, and standalone Pagination cover shared feedback, surface, and collection patterns.
 - [ ] DataTable uses MUI rendering and TanStack Table state.
 - [ ] Sample page demonstrates the requested component flexibility.
 
-## Task 12: Add documentation and final verification
+## Task 24: Add documentation and final verification
 
 **Description:** Add README guidance covering architecture, scripts, environment variables, security assumptions, performance practices, and extension guidelines.
 
@@ -374,7 +679,7 @@ package.json and config files
 - [ ] Run `corepack pnpm test`.
 - [ ] Run `corepack pnpm build`.
 
-**Dependencies:** Tasks 1-11
+**Dependencies:** Tasks 1-23
 
 **Files likely touched:**
 

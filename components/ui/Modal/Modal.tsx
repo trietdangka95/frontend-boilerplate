@@ -4,15 +4,16 @@ import Dialog, { type DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
 import { X } from "lucide-react";
 import { type ReactNode, useId } from "react";
 
+import { IconButton } from "@/components/ui/IconButton";
 import { cn } from "@/utils/cn";
 
 export interface ModalProps extends Omit<DialogProps, "children" | "onClose" | "open" | "title"> {
   actions?: ReactNode;
   children: ReactNode;
+  closeDisabled?: boolean;
   closeLabel?: string;
   onClose: () => void;
   open: boolean;
@@ -23,6 +24,7 @@ export function Modal({
   actions,
   children,
   className,
+  closeDisabled = false,
   closeLabel = "Close dialog",
   maxWidth = "sm",
   onClose,
@@ -49,6 +51,7 @@ export function Modal({
         <IconButton
           aria-label={closeLabel}
           className="h-9 w-9 text-slate-500 hover:bg-slate-100 hover:text-slate-950"
+          disabled={closeDisabled}
           onClick={onClose}
           type="button"
         >

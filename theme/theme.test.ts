@@ -24,4 +24,17 @@ describe("design system theme", () => {
   it("keeps component radii on the shared radius scale", () => {
     expect(theme.shape.borderRadius).toBe(designTokens.radius.md);
   });
+
+  it("aligns outlined labels with compact inputs and masks the focus ring", () => {
+    expect(theme.components?.MuiInputLabel?.styleOverrides?.root).toMatchObject({
+      "&.MuiInputLabel-outlined.MuiInputLabel-shrink": {
+        backgroundColor: designTokens.color.neutral[0],
+        paddingInline: 4,
+        transform: "translate(11px, -9px) scale(0.75)",
+      },
+      "&.MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
+        transform: "translate(14px, 11px) scale(1)",
+      },
+    });
+  });
 });

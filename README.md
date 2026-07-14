@@ -116,12 +116,23 @@ Current base primitives include:
 
 - `AppShell`, `PageContainer`, and `PageHeader`
 - `Button`
+- `IconButton`
 - `Modal`
+- `ConfirmDialog`
+- `DropdownMenu` and `ActionMenu`
+- `Tabs` and `Breadcrumbs`
 - `InputField`
 - `SelectBox`
 - `CheckboxField`
+- `RadioGroupField`
+- `SwitchField`
+- `AutocompleteField`
 - `DataTable`
+- Standalone `Pagination`
+- `SectionCard`
 - `StatusChip`
+- `InlineAlert`
+- `LoadingState`
 - `EmptyState`
 - `AppToastProvider` and `appToast`
 

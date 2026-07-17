@@ -36,7 +36,7 @@ export function AppShell({
         elevation={0}
         position="fixed"
         sx={{
-          bgcolor: "rgba(255, 255, 255, 0.88)",
+          bgcolor: "var(--mui-palette-background-paper)",
           borderBottom: 1,
           borderColor: "divider",
           color: "text.primary",

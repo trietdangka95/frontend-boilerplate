@@ -2,7 +2,7 @@ import { createTheme } from "@mui/material/styles";
 
 import { designTokens } from "./tokens";
 
-const { brand, neutral } = designTokens.color;
+const { brand, neutral, darkNeutral } = designTokens.color;
 
 export const theme = createTheme({
   breakpoints: {
@@ -174,45 +174,91 @@ export const theme = createTheme({
       },
     },
   },
-  cssVariables: true,
-  palette: {
-    action: {
-      active: neutral[600],
-      hover: "rgba(15, 23, 42, 0.05)",
-      selected: "rgba(13, 118, 110, 0.10)",
+  cssVariables: { colorSchemeSelector: "class" },
+  colorSchemes: {
+    light: {
+      palette: {
+        action: {
+          active: neutral[600],
+          hover: "rgba(15, 23, 42, 0.05)",
+          selected: "rgba(13, 118, 110, 0.10)",
+        },
+        background: {
+          default: neutral[50],
+          paper: neutral[0],
+        },
+        divider: neutral[200],
+        error: {
+          main: "#b42318",
+        },
+        info: {
+          main: "#2563a8",
+        },
+        primary: {
+          contrastText: neutral[0],
+          dark: brand[700],
+          light: brand[100],
+          main: brand[600],
+        },
+        secondary: {
+          contrastText: neutral[0],
+          dark: neutral[900],
+          light: neutral[600],
+          main: neutral[800],
+        },
+        success: {
+          main: "#287a4b",
+        },
+        text: {
+          primary: neutral[900],
+          secondary: neutral[600],
+        },
+        warning: {
+          main: "#a15c07",
+        },
+      },
     },
-    background: {
-      default: neutral[50],
-      paper: neutral[0],
-    },
-    divider: neutral[200],
-    error: {
-      main: "#b42318",
-    },
-    info: {
-      main: "#2563a8",
-    },
-    primary: {
-      contrastText: neutral[0],
-      dark: brand[700],
-      light: brand[100],
-      main: brand[600],
-    },
-    secondary: {
-      contrastText: neutral[0],
-      dark: neutral[900],
-      light: neutral[600],
-      main: neutral[800],
-    },
-    success: {
-      main: "#287a4b",
-    },
-    text: {
-      primary: neutral[900],
-      secondary: neutral[600],
-    },
-    warning: {
-      main: "#a15c07",
+    dark: {
+      palette: {
+        action: {
+          active: darkNeutral[600],
+          hover: "rgba(255, 255, 255, 0.05)",
+          selected: "rgba(13, 118, 110, 0.20)",
+        },
+        background: {
+          default: darkNeutral[50],
+          paper: darkNeutral[0],
+        },
+        divider: darkNeutral[200],
+        error: {
+          main: "#f04438",
+        },
+        info: {
+          main: "#53b1fd",
+        },
+        primary: {
+          contrastText: darkNeutral[950],
+          dark: brand[500],
+          light: brand[800],
+          main: brand[400],
+        },
+        secondary: {
+          contrastText: darkNeutral[950],
+          dark: darkNeutral[100],
+          light: darkNeutral[400],
+          main: darkNeutral[200],
+        },
+        success: {
+          main: "#32d583",
+        },
+        text: {
+          primary: darkNeutral[900],
+          secondary: darkNeutral[600],
+        },
+        warning: {
+          main: "#fec84b",
+        },
+      },
     },
   },
   shape: {

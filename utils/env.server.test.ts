@@ -15,6 +15,7 @@ describe("getServerEnv", () => {
       API_REFRESH_ENDPOINT: "/auth/refresh",
       NEXT_PUBLIC_API_BASE_URL: "https://api.example.com",
       NEXT_PUBLIC_APP_ENV: "test",
+      NEXT_PUBLIC_SITE_URL: "http://localhost:3000",
     });
   });
 

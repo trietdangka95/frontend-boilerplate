@@ -6,9 +6,12 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import { Bell } from "lucide-react";
 
+import { ColorModeToggle } from "@/components/ui/ColorModeToggle/ColorModeToggle";
+
 export function DashboardTopbarActions() {
   return (
     <>
+      <ColorModeToggle />
       <Tooltip title="Notifications">
         <IconButton aria-label="Notifications">
           <Badge color="primary" variant="dot">

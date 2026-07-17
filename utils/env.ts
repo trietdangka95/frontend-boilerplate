@@ -8,10 +8,12 @@ export const publicEnvSchema = z
   .object({
     NEXT_PUBLIC_API_BASE_URL: z.string().url().optional(),
     NEXT_PUBLIC_APP_ENV: appEnvSchema.default("development"),
+    NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
   })
   .transform((env) => ({
     NEXT_PUBLIC_API_BASE_URL: env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3000/api",
     NEXT_PUBLIC_APP_ENV: env.NEXT_PUBLIC_APP_ENV,
+    NEXT_PUBLIC_SITE_URL: env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   }));
 
 export type PublicEnv = z.infer<typeof publicEnvSchema>;
@@ -29,6 +31,7 @@ function pickPublicEnv(source: EnvSource) {
   return {
     NEXT_PUBLIC_API_BASE_URL: source.NEXT_PUBLIC_API_BASE_URL,
     NEXT_PUBLIC_APP_ENV: source.NEXT_PUBLIC_APP_ENV,
+    NEXT_PUBLIC_SITE_URL: source.NEXT_PUBLIC_SITE_URL,
   };
 }
 
@@ -36,6 +39,7 @@ function getDefaultPublicEnvSource(): EnvSource {
   return {
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   };
 }
 

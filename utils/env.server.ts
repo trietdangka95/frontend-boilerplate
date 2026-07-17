@@ -33,6 +33,7 @@ function getDefaultServerEnvSource(): EnvSource {
     API_REFRESH_ENDPOINT: process.env.API_REFRESH_ENDPOINT,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     NEXT_PUBLIC_APP_ENV: process.env.NEXT_PUBLIC_APP_ENV,
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   };
 }
 

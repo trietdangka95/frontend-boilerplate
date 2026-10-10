@@ -41,7 +41,7 @@ jobs:
           NEXT_PUBLIC_APP_ENV: production
           NEXT_PUBLIC_API_BASE_URL: https://api.example.com
           NEXT_PUBLIC_SITE_URL: https://app.example.com
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: coverage
@@ -61,7 +61,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm e2e
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report

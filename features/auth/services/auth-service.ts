@@ -1,24 +1,17 @@
-import { clearAccessToken, setAccessToken } from "@/services/api/auth-token";
+import { apiClient } from "@/services/api/browser-client";
+import { AppApiError } from "@/services/api/api-error";
+import { clearAccessToken } from "@/services/api/auth-token";
+import type { ApiSuccessResponse } from "@/types/api";
 
-import type { AuthResponse, ForgotPasswordPayload, LoginPayload, RegisterPayload } from "../types";
+import type { AuthSession, ForgotPasswordPayload, LoginPayload, RegisterPayload } from "../types";
 
 // In a real app, these endpoints would exist on the backend.
 // For the boilerplate, we assume the endpoints are standard.
 
-export async function login(payload: LoginPayload): Promise<AuthResponse> {
-  void payload;
-  // Using POST /auth/login
-  // const response = await apiClient.post<AuthResponse>("/auth/login", payload);
-  // return response.data;
+export async function login(payload: LoginPayload): Promise<AuthSession> {
+  const response = await apiClient.post<ApiSuccessResponse<AuthSession>>("/auth/session", payload);
 
-  // Stub for boilerplate demonstration:
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const mockToken = "mock_access_token_12345";
-      setAccessToken(mockToken);
-      resolve({ accessToken: mockToken });
-    }, 1000);
-  });
+  return response.data.data;
 }
 
 export async function register(payload: RegisterPayload): Promise<void> {
@@ -26,7 +19,10 @@ export async function register(payload: RegisterPayload): Promise<void> {
   // await apiClient.post("/auth/register", payload);
 
   // Stub for boilerplate demonstration:
-  return new Promise((resolve) => setTimeout(resolve, 1000));
+  throw new AppApiError({
+    code: "NOT_IMPLEMENTED",
+    message: "Registration is not connected. This is a demo form.",
+  });
 }
 
 export async function forgotPassword(payload: ForgotPasswordPayload): Promise<void> {
@@ -34,12 +30,15 @@ export async function forgotPassword(payload: ForgotPasswordPayload): Promise<vo
   // await apiClient.post("/auth/forgot-password", payload);
 
   // Stub for boilerplate demonstration:
-  return new Promise((resolve) => setTimeout(resolve, 1000));
+  throw new AppApiError({
+    code: "NOT_IMPLEMENTED",
+    message: "Password recovery is not connected. This is a demo form.",
+  });
 }
 
 export async function logout(): Promise<void> {
   try {
-    // await apiClient.post("/auth/logout");
+    await apiClient.delete("/auth/session");
   } finally {
     clearAccessToken();
   }

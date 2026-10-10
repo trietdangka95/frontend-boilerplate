@@ -81,6 +81,7 @@ export default function ForgotPasswordPage() {
         sx={{ display: "flex", flexDirection: "column", gap: 3 }}
       >
         <InputField
+          autoComplete="email"
           control={control}
           fullWidth
           label="Email"
@@ -101,7 +102,7 @@ export default function ForgotPasswordPage() {
           sx={{
             color: "text.secondary",
             fontSize: "0.875rem",
-            fontWeight: 600,
+            fontWeight: "fontWeightMedium",
             textDecoration: "none",
             "&:hover": { color: "text.primary" },
           }}

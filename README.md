@@ -1,198 +1,87 @@
 # Enterprise Frontend Boilerplate
 
-A production-ready Next.js App Router boilerplate with strict TypeScript, MUI primitives, Tailwind CSS utilities, TanStack Query, Axios refresh-token networking, Zustand UI state, React Hook Form, Zod, Vitest, and a small example feature slice.
+A Next.js App Router starter with strict TypeScript, MUI, semantic Tailwind utilities, TanStack Query/Table, Axios, React Hook Form, Zod, and tested shared components. Node 24 LTS and pnpm 10.12.1 are the supported toolchain; exact dependency versions live in package.json and the lockfile.
 
-## Quick Start
+## Start locally
+
+Use Node 24 (see .node-version), then:
 
 ```bash
-corepack pnpm install
+corepack pnpm install --frozen-lockfile
 cp .env.example .env.local
 corepack pnpm dev
 ```
 
-The app runs on [http://localhost:3000](http://localhost:3000) by default.
+The public starter is at http://localhost:3000. The component catalog and data examples live at /examples. No login or secret is needed for the default starter.
 
-## Commands
-
-| Command                       | Description                     |
-| ----------------------------- | ------------------------------- |
-| `corepack pnpm dev`           | Start the Next.js dev server    |
-| `corepack pnpm build`         | Create a production build       |
-| `corepack pnpm start`         | Start the production server     |
-| `corepack pnpm lint`          | Run ESLint                      |
-| `corepack pnpm lint:fix`      | Run ESLint with fixes           |
-| `corepack pnpm format`        | Format files with Prettier      |
-| `corepack pnpm format:check`  | Check Prettier formatting       |
-| `corepack pnpm typecheck`     | Run TypeScript without emitting |
-| `corepack pnpm test`          | Run Vitest tests                |
-| `corepack pnpm test:coverage` | Run Vitest with coverage        |
-
-## Project Structure
-
-```text
-.
-|-- app/                  # App Router routes, providers, and route fallbacks
-|-- components/
-|   |-- common/           # Cross-app common UI such as toast provider
-|   |-- layout/           # Responsive app shell and page-level composition
-|   `-- ui/               # Reusable base UI primitives
-|-- features/
-|   `-- example/          # Example feature-local components, hooks, schemas, services, types
-|-- providers/            # Client provider boundaries
-|-- services/
-|   |-- api/              # Axios client, error normalization, auth refresh helpers
-|   `-- query/            # TanStack Query client setup
-|-- stores/               # Zustand client UI state
-|-- theme/                # Semantic tokens and MUI theme overrides
-|-- types/                # Shared TypeScript contracts
-|-- utils/                # Shared utilities and env validation
-|-- docs/                 # Specs and implementation plans
-`-- tests/                # Test setup
-```
-
-Feature modules own feature-specific code. Shared primitives stay in top-level shared folders.
+Demo authentication is disabled by default. To explore it locally, set ENABLE_DEMO_AUTH=true and generate a unique DEMO_SESSION_SECRET of at least 32 characters in your local environment. Open /login. Any schema-valid credentials demonstrate a session; they do not identify a real user. Registration and password recovery explicitly report that no backend is connected. The production runtime always rejects demo authentication, even if the flag is enabled.
 
 ## Architecture
 
-The app defaults to Server Components. Browser-only state, providers, form controls, and interactive UI live behind explicit client boundaries.
+- app/: routes, metadata, providers, fallbacks; / is the independent starter, /examples is the reference dashboard.
+- components/ui/: shared MUI primitives and form controls.
+- components/layout/: reusable shell and page composition.
+- features/: feature-local components, hooks, query options, schemas, services, and types.
+- services/api/: transport factory, client/server boundaries, error normalization, optional bearer refresh.
+- services/auth/: fail-closed session contract and same-origin cookie-write check.
+- services/observability/: redacted error events and replaceable reporting sink.
+- theme/: shared tokens, MUI mapping, light/dark schemes, styling contract tests.
+- tests/e2e/: production browser checks and isolated local demo-auth tests.
 
-Global client providers are composed in `app/providers.tsx`:
+Prefer Server Components. Keep API reads in TanStack queries and writes in mutations. Query-key factories and typed queryOptions are reused for server prefetch and client hydration. Use React Hook Form + feature-local Zod schemas for forms; mutation.isPending owns async submit state. Zustand is limited to shared AppShell UI state.
 
-- MUI App Router cache provider with CSS layer support.
-- MUI theme provider.
-- TanStack Query provider with a server-fresh and browser-stable query client.
-- React Hot Toast provider.
+The styling pipeline is theme/tokens.ts → MUI CSS variables → semantic Tailwind aliases. Reuse components/ui/DataTable and its v9 column helper. See [design system](docs/design-system.md), [TanStack contract](docs/specs/tanstack-stable-best-practices.md), and AGENTS.md.
 
-Tailwind CSS v4 and MUI are ordered through cascade layers in `app/globals.css`:
+The root layout reads request headers for CSP nonces, so application pages are dynamically rendered. This starter requires a Next.js server; static export is not the default deployment model.
 
-```css
-@layer theme, base, mui, components, utilities;
-@import "tailwindcss";
-```
+## Configuration
 
-This lets Tailwind utilities override MUI component styles without `!important`.
+| Variable                 | Local/test                                         | Staging/production                             |
+| ------------------------ | -------------------------------------------------- | ---------------------------------------------- |
+| NEXT_PUBLIC_APP_ENV      | Defaults from NODE_ENV; test is for isolated tests | staging or production                          |
+| NEXT_PUBLIC_API_BASE_URL | localhost fallback                                 | Required HTTPS URL, no credentials or loopback |
+| NEXT_PUBLIC_SITE_URL     | localhost fallback                                 | Required HTTPS URL, no credentials or loopback |
+| ENABLE_DEMO_AUTH         | false; explicit local opt-in                       | Always ineffective                             |
+| DEMO_SESSION_SECRET      | Needed only for demo auth                          | Unused by core                                 |
 
-The Axios client in `services/api` uses:
+Public variables are embedded at build time. Build separately for each deployment configuration; changing only runtime environment values does not rewrite browser bundles. Metadata, sitemap, and robots use the validated site URL. Missing deployment URLs fail before compilation. NEXT_PUBLIC_APP_ENV=test is reserved for local integration tests, not deployment.
 
-- Public API base URL from validated env.
-- Request timeout, JSON headers, credentials, and request IDs.
-- In-memory access token support only.
-- HTTP-only refresh cookie assumptions.
-- Single-flight refresh queue for parallel 401 responses.
-- Normalized `AppApiError` errors.
+API_REFRESH_ENDPOINT has been removed: it was not connected to runtime behavior. Configure refreshEndpoint explicitly on an optional bearer client.
 
-## Environment Variables
+## Authentication and API contracts
 
-Copy `.env.example` to `.env.local` for local overrides.
+The core does not ship a working identity provider. resolveSession in services/auth/session.ts returns null until you connect one. Unknown API routes and private pages are denied by default. Public pages, metadata, and /api/health are explicitly allowlisted in proxy.ts.
 
-| Variable                   | Scope       | Required         | Notes                                             |
-| -------------------------- | ----------- | ---------------- | ------------------------------------------------- |
-| `NEXT_PUBLIC_API_BASE_URL` | Public      | Optional locally | Defaults to `http://localhost:3000/api`           |
-| `NEXT_PUBLIC_APP_ENV`      | Public      | Optional         | `development`, `test`, `staging`, or `production` |
-| `API_REFRESH_ENDPOINT`     | Server-only | Optional         | Defaults to `/auth/refresh`                       |
+Every private Route Handler must also call requireSession before accessing data. A page redirect or proxy check alone is not data authorization. Apply tenant, role, and ownership rules at the service/data boundary.
 
-Only `NEXT_PUBLIC_*` values may be used by client code. Runtime secrets must remain server-only.
+Use services/api/browser-client.ts for same-origin cookie/BFF requests. It deliberately does not refresh bearer tokens on 401. For external APIs use createApiClient with its own createAccessTokenStore, enableRefresh, and refreshEndpoint. Create a new createServerApiClient inside each server request; never put a credential-bearing client in a module singleton. See the [auth decision and migration guide](docs/adr/0001-auth-and-examples.md).
 
-## Security Notes
-
-- Refresh tokens are assumed to live in HTTP-only cookies, not `localStorage` or `sessionStorage`.
-- Access tokens are stored in memory only through `services/api/auth-token.ts`.
-- `.env*` files are ignored except `.env.example`.
-- API errors are normalized before reaching app code to avoid leaking transport internals.
-- Validate external input at boundaries with Zod schemas.
-
-## UI Standards
-
-Reusable components should:
-
-- Use MUI primitives for accessible structure.
-- Use Tailwind utilities for local layout and visual overrides.
-- Forward refs where consumers naturally expect them.
-- Accept `className` and relevant MUI props.
-- Keep server state in TanStack Query, not Zustand.
-- Keep global client state limited to reusable UI preferences.
-
-Current base primitives include:
-
-- `AppShell`, `PageContainer`, and `PageHeader`
-- `Button`
-- `IconButton`
-- `Modal`
-- `ConfirmDialog`
-- `DropdownMenu` and `ActionMenu`
-- `Tabs` and `Breadcrumbs`
-- `InputField`
-- `SelectBox`
-- `CheckboxField`
-- `RadioGroupField`
-- `SwitchField`
-- `AutocompleteField`
-- `DataTable`
-- Standalone `Pagination`
-- `SectionCard`
-- `StatusChip`
-- `InlineAlert`
-- `LoadingState`
-- `EmptyState`
-- `AppToastProvider` and `appToast`
-
-### Design tokens
-
-`theme/tokens.ts` is the source of truth for brand color, neutral color, spacing, radius, motion, shadow, and layout values. `theme/theme.ts` maps those tokens into MUI so components share focus, hover, active, disabled, error, and responsive states.
-
-- Brand accent: restrained teal; semantic feedback colors remain separate.
-- Typography: Avenir Next with Segoe UI and system fallbacks; no runtime font request.
-- Spacing: 4 px base unit.
-- Breakpoints: `sm` 600, `md` 768, `lg` 1024, `xl` 1440.
-- Content width: 1280 px with responsive 16/24/32 px page gutters.
-- Full-height layouts use `100dvh` to avoid mobile browser viewport jumps.
-
-Import layout and status primitives from their public barrels:
-
-```tsx
-import { AppShell, PageContainer, PageHeader } from "@/components/layout";
-import { StatusChip } from "@/components/ui/StatusChip";
-
-<AppShell brand="Product" navigation={navigation}>
-  <PageContainer>
-    <PageHeader title="Workspace" description="Current activity and controls." />
-    <StatusChip label="Active" tone="success" />
-  </PageContainer>
-</AppShell>;
-```
-
-The home route is a living reference for the palette, type hierarchy, component variants, responsive shell, form validation, query loading state, table interactions, and modal details.
-
-## Forms
-
-Form primitives work both uncontrolled and with React Hook Form `Controller`. Use feature-local Zod schemas and `zodResolver` for validation.
-
-```tsx
-<InputField control={control} label="Owner email" name="owner" type="email" />
-```
-
-## Performance Guidance
-
-- Prefer Server Components and static rendering by default.
-- Keep client components as small as practical.
-- Put browser-only providers in `app/providers.tsx`, not in every route.
-- Use TanStack Query stale times above zero to avoid immediate hydration refetch churn.
-- Use Next.js image and font primitives when adding production assets.
-- Use dynamic imports for rarely used heavy client-only surfaces.
-- Watch Core Web Vitals: LCP under 2.5s, CLS under 0.1, INP under 200ms.
-
-## Tooling Notes
-
-The plan draft listed newer TypeScript and ESLint versions. This implementation uses `typescript@6.0.3` and `eslint@9.39.4` because the current TypeScript ESLint and Next lint ecosystem does not fully support the draft `typescript@7` plus `eslint@10` combination without parser incompatibilities.
-
-## Verification
-
-Before handoff or merge, run:
+## Quality checks
 
 ```bash
-corepack pnpm lint
-corepack pnpm format:check
-corepack pnpm typecheck
 corepack pnpm test
+corepack pnpm test:coverage
+corepack pnpm lint
+corepack pnpm typecheck
+corepack pnpm format:check
 corepack pnpm build
+corepack pnpm exec playwright install chromium
+corepack pnpm e2e
 ```
+
+A production build requires valid deployment URLs. For local production-mode smoke checks, Playwright supplies explicit test settings automatically. E2E starts a production build on port 3101 and a separate local demo server on port 3102, with a randomly generated test-only secret. It never reuses an existing server. Desktop/mobile and light/dark projects cover navigation, forms, tables, keyboard focus, console errors, and security boundaries.
+
+Turbopack is the default. On restricted hosts where its internal worker cannot open a port, Next also supports pnpm build --webpack. Set E2E_WEBPACK=true for the same supported bundler in the browser suite.
+
+Vitest coverage includes both tested and untested application files, excluding tests, declarations, type-only files, and barrels. Gates are 80% statements/lines/functions and 70% branches. CI runs quality and browser jobs, uploads reports, and audits production dependencies. Husky runs lint-staged on commit. Dependabot proposes weekly dependency updates.
+
+## Adapting the starter
+
+1. Rename branding and metadata, and edit existing tokens in theme/tokens.ts.
+2. Add your feature under features/ and use shared query/form/table patterns.
+3. Connect a real identity provider at the session contract before adding private data.
+4. Replace example transports with typed, validated API services.
+5. Remove optional examples using the [removal guide](docs/adr/0001-auth-and-examples.md).
+6. Follow the [deployment checklist](docs/production.md).
+
+/api/health is a minimal no-store liveness endpoint. It does not claim that a future backend or database is ready. Error boundaries and Next instrumentation emit redacted structured events; wire the reporting sink to your chosen monitoring service before launch. No monitoring account, database, real authentication provider, or deployment is provisioned by this repository.

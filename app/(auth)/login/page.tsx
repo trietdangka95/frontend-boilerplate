@@ -42,6 +42,7 @@ export default function LoginPage() {
         sx={{ display: "flex", flexDirection: "column", gap: 3 }}
       >
         <InputField
+          autoComplete="email"
           control={control}
           fullWidth
           label="Email"
@@ -51,6 +52,7 @@ export default function LoginPage() {
         />
 
         <InputField
+          autoComplete="current-password"
           control={control}
           fullWidth
           label="Password"
@@ -67,7 +69,7 @@ export default function LoginPage() {
             sx={{
               color: "primary.main",
               fontSize: "0.875rem",
-              fontWeight: 600,
+              fontWeight: "fontWeightMedium",
               textDecoration: "none",
               "&:hover": { textDecoration: "underline" },
             }}
@@ -89,7 +91,7 @@ export default function LoginPage() {
             href="/register"
             sx={{
               color: "primary.main",
-              fontWeight: 600,
+              fontWeight: "fontWeightMedium",
               textDecoration: "none",
               "&:hover": { textDecoration: "underline" },
             }}

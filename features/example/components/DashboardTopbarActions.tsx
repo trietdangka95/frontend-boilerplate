@@ -7,8 +7,11 @@ import Tooltip from "@mui/material/Tooltip";
 import { Bell } from "lucide-react";
 
 import { ColorModeToggle } from "@/components/ui/ColorModeToggle/ColorModeToggle";
+import { useLogout } from "@/features/auth/hooks/use-auth";
 
-export function DashboardTopbarActions() {
+export function DashboardTopbarActions({ showDemoAuth = false }: { showDemoAuth?: boolean }) {
+  const logout = useLogout();
+
   return (
     <>
       <ColorModeToggle />
@@ -19,12 +22,31 @@ export function DashboardTopbarActions() {
           </Badge>
         </IconButton>
       </Tooltip>
-      <Avatar
-        alt="Minh Tran"
-        sx={{ bgcolor: "secondary.main", fontSize: 13, fontWeight: 750, height: 34, width: 34 }}
-      >
-        MT
-      </Avatar>
+      {showDemoAuth ? (
+        <Tooltip title="Log out">
+          <span>
+            <IconButton
+              aria-label="MT — Log out"
+              disabled={logout.isPending}
+              onClick={() => logout.mutate()}
+              sx={{ p: 0 }}
+            >
+              <Avatar
+                alt="Minh Tran"
+                sx={{
+                  bgcolor: "secondary.main",
+                  fontSize: 13,
+                  fontWeight: "fontWeightBold",
+                  height: 34,
+                  width: 34,
+                }}
+              >
+                MT
+              </Avatar>
+            </IconButton>
+          </span>
+        </Tooltip>
+      ) : null}
     </>
   );
 }

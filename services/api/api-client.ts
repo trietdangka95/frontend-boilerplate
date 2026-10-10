@@ -7,7 +7,7 @@ import axios, {
 
 import { getPublicEnv } from "@/utils/env";
 
-import { clearAccessToken, getAccessToken, setAccessToken } from "./auth-token";
+import { createAccessTokenStore, type AccessTokenStore } from "./auth-token";
 import { createAuthRefreshError, normalizeApiError } from "./api-error";
 import { requestTokenRefresh, type RefreshAccessToken } from "./refresh-token";
 
@@ -24,6 +24,8 @@ interface RefreshAccessTokenContext {
 }
 
 export interface ApiClientOptions {
+  tokenStore?: AccessTokenStore;
+  enableRefresh?: boolean;
   adapter?: AxiosAdapter;
   baseURL?: string;
   refreshAccessToken?: (context: RefreshAccessTokenContext) => Promise<string | null>;
@@ -70,6 +72,8 @@ function getOriginalRequest(error: unknown) {
 }
 
 export function createApiClient({
+  tokenStore = createAccessTokenStore(),
+  enableRefresh = false,
   adapter,
   baseURL = getPublicEnv().NEXT_PUBLIC_API_BASE_URL,
   refreshAccessToken,
@@ -102,7 +106,7 @@ export function createApiClient({
   function refreshOnce() {
     refreshPromise ??= refreshAccessTokenRequest()
       .then((token) => {
-        setAccessToken(token);
+        tokenStore.set(token);
         return token;
       })
       .finally(() => {
@@ -116,7 +120,7 @@ export function createApiClient({
     const headers = ensureHeaders(config);
 
     headers.set("X-Request-ID", requestIdGenerator());
-    setAuthorizationHeader(config, getAccessToken());
+    setAuthorizationHeader(config, tokenStore.get());
 
     return config;
   });
@@ -127,7 +131,12 @@ export function createApiClient({
       const status = getStatus(error);
       const originalRequest = getOriginalRequest(error);
 
-      if (status !== 401 || !originalRequest || originalRequest.__isRetryRequest) {
+      if (
+        (!enableRefresh && !refreshAccessToken) ||
+        status !== 401 ||
+        !originalRequest ||
+        originalRequest.__isRetryRequest
+      ) {
         throw normalizeApiError(error);
       }
 
@@ -143,7 +152,7 @@ export function createApiClient({
         setAuthorizationHeader(originalRequest, refreshedToken);
         return apiClient(originalRequest);
       } catch (refreshError) {
-        clearAccessToken();
+        tokenStore.set(null);
         throw createAuthRefreshError(refreshError);
       }
     },
@@ -151,5 +160,3 @@ export function createApiClient({
 
   return apiClient;
 }
-
-export const apiClient = createApiClient();

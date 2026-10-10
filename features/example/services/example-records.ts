@@ -31,8 +31,9 @@ let exampleRecords: ExampleRecord[] = [
   },
 ];
 
+const DEMO_LATENCY_MS = 80;
 function waitForDemoLatency() {
-  return new Promise((resolve) => setTimeout(resolve, 80));
+  return new Promise((resolve) => setTimeout(resolve, DEMO_LATENCY_MS));
 }
 
 export async function listExampleRecords() {
@@ -45,7 +46,7 @@ export async function createExampleRecord(input: CreateExampleRecordInput) {
 
   const record: ExampleRecord = {
     createdAt: new Date().toISOString(),
-    id: `rec-${Date.now().toString(36)}`,
+    id: `rec-${crypto.randomUUID()}`,
     name: input.name,
     owner: input.owner,
     status: input.status,

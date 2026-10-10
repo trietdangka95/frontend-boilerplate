@@ -44,13 +44,13 @@ export function Modal({
       open={open}
       {...props}
     >
-      <div className="flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 sm:px-6">
+      <div className="flex items-start justify-between gap-4 border-b border-default px-5 py-4 sm:px-6">
         <DialogTitle className="p-0" id={titleId} variant="h4">
           {title}
         </DialogTitle>
         <IconButton
           aria-label={closeLabel}
-          className="h-9 w-9 text-slate-500 hover:bg-slate-100 hover:text-slate-950"
+          className="h-9 w-9 text-muted hover:bg-surface-subtle hover:text-foreground"
           disabled={closeDisabled}
           onClick={onClose}
           type="button"
@@ -59,9 +59,9 @@ export function Modal({
         </IconButton>
       </div>
 
-      <DialogContent className={cn("px-5 py-5 text-slate-700 sm:px-6")}>{children}</DialogContent>
+      <DialogContent className={cn("px-5 py-5 text-muted sm:px-6")}>{children}</DialogContent>
       {actions ? (
-        <DialogActions className="gap-2 border-t border-slate-200 px-5 py-4 sm:px-6">
+        <DialogActions className="gap-2 border-t border-default px-5 py-4 sm:px-6">
           {actions}
         </DialogActions>
       ) : null}

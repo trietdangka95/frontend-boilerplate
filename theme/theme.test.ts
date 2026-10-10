@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
+import { getContrastRatio } from "@mui/material/styles";
 
 import { designTokens } from "./tokens";
 import { theme } from "./theme";
 
+const WCAG_AA_NORMAL_TEXT_CONTRAST = 4.5;
+
 describe("design system theme", () => {
   it("exposes a semantic brand palette and avoids Inter typography", () => {
-    expect(designTokens.color.brand[600]).toBe("#0d766e");
-    expect(theme.palette.primary.main).toBe(designTokens.color.brand[600]);
+    expect(theme.palette.primary.main).toBe(designTokens.color.semantic.light.primary.main);
     expect(theme.typography.fontFamily).not.toContain("Inter");
   });
 
@@ -25,16 +27,35 @@ describe("design system theme", () => {
     expect(theme.shape.borderRadius).toBe(designTokens.radius.md);
   });
 
-  it("aligns outlined labels with compact inputs and masks the focus ring", () => {
-    expect(theme.components?.MuiInputLabel?.styleOverrides?.root).toMatchObject({
-      "&.MuiInputLabel-outlined.MuiInputLabel-shrink": {
-        backgroundColor: designTokens.color.neutral[0],
-        paddingInline: 4,
-        transform: "translate(11px, -9px) scale(0.75)",
-      },
-      "&.MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
-        transform: "translate(14px, 11px) scale(1)",
-      },
-    });
+  it("emits shared application tokens as MUI CSS variables", () => {
+    expect(theme.vars.app.layout.sidebarWidth).toContain("--mui-app-layout-sidebarWidth");
+    expect(theme.vars.app.motion.durationStandard).toContain("--mui-app-motion-durationStandard");
+    expect(theme.vars.app.radius.lg).toContain("--mui-app-radius-lg");
+    expect(theme.vars.app.shadow.focus).toContain("--mui-app-shadow-focus");
+    expect(theme.vars.app.typography.fontWeightSemibold).toContain(
+      "--mui-app-typography-fontWeightSemibold",
+    );
+    expect(theme.vars.spacing).toContain("--mui-spacing");
+    expect(JSON.stringify(theme.generateStyleSheets())).toContain("--mui-app-radius-lg");
+  });
+
+  it("defines semantic values for both stable color schemes", () => {
+    expect(theme.colorSchemes.light?.palette.background.default).toBe(
+      designTokens.color.semantic.light.background.canvas,
+    );
+    expect(theme.colorSchemes.dark?.palette.background.default).toBe(
+      designTokens.color.semantic.dark.background.canvas,
+    );
+  });
+
+  it("keeps dark-mode action colors above the WCAG AA contrast threshold", () => {
+    const darkColors = designTokens.color.semantic.dark;
+
+    expect(
+      getContrastRatio(darkColors.primary.main, darkColors.primary.contrast),
+    ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT_CONTRAST);
+    expect(
+      getContrastRatio(darkColors.secondary.main, darkColors.background.canvas),
+    ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL_TEXT_CONTRAST);
   });
 });

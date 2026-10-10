@@ -1,63 +1,90 @@
 "use client";
 
+import { useEffect } from "react";
+import { reportError } from "@/services/observability/report-error";
+
+import { designTokens } from "@/theme/tokens";
+
 interface GlobalErrorPageProps {
   error: Error & { digest?: string };
   reset: () => void;
 }
 
 export default function GlobalErrorPage({ error, reset }: GlobalErrorPageProps) {
+  useEffect(() => reportError(error, "global-boundary"), [error]);
+  const colors = designTokens.color.semantic.light;
+
   return (
     <html lang="en">
       <body>
         <main
           style={{
             alignItems: "center",
-            background: "#f8fafc",
-            color: "#0f172a",
+            background: colors.background.canvas,
+            color: colors.text.primary,
             display: "flex",
-            fontFamily:
-              '"Avenir Next", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif',
+            fontFamily: designTokens.typography.fontFamily,
             justifyContent: "center",
             minHeight: "100dvh",
-            padding: "48px 24px",
+            padding: `${designTokens.space["3xl"]}px ${designTokens.space.xl}px`,
           }}
         >
           <section
             style={{
-              background: "#ffffff",
-              border: "1px solid #e2e8f0",
-              borderRadius: 16,
-              maxWidth: 560,
-              padding: 24,
+              background: colors.background.surface,
+              border: `1px solid ${colors.border}`,
+              borderRadius: designTokens.radius.lg,
+              maxWidth: designTokens.layout.narrowContentMaxWidth,
+              padding: designTokens.space.xl,
               width: "100%",
             }}
           >
-            <p style={{ color: "#0d766e", fontSize: 14, fontWeight: 700, margin: "0 0 8px" }}>
+            <p
+              style={{
+                color: colors.primary.main,
+                fontSize: 14,
+                fontWeight: designTokens.typography.fontWeight.bold,
+                margin: `0 0 ${designTokens.space.sm}px`,
+              }}
+            >
               Application error
             </p>
-            <h1 style={{ fontSize: 32, lineHeight: 1.2, margin: "0 0 12px" }}>
+            <h1
+              style={{
+                fontSize: 32,
+                lineHeight: 1.2,
+                margin: `0 0 ${designTokens.space.md}px`,
+              }}
+            >
               The app needs a quick reset
             </h1>
-            <p style={{ color: "#475569", fontSize: 16, lineHeight: 1.6, margin: "0 0 20px" }}>
+            <p
+              style={{
+                color: colors.text.secondary,
+                fontSize: 16,
+                lineHeight: 1.6,
+                margin: `0 0 ${designTokens.space.xl}px`,
+              }}
+            >
               A global boundary caught an unexpected failure before the route could render.
             </p>
             {error.digest ? (
-              <p style={{ color: "#64748b", fontFamily: "monospace", fontSize: 12 }}>
+              <p style={{ color: colors.text.secondary, fontFamily: "monospace", fontSize: 12 }}>
                 Error digest: {error.digest}
               </p>
             ) : null}
             <button
               onClick={reset}
               style={{
-                background: "#0d766e",
+                background: colors.primary.main,
                 border: 0,
-                borderRadius: 10,
-                color: "#ffffff",
+                borderRadius: designTokens.radius.md,
+                color: colors.primary.contrast,
                 cursor: "pointer",
                 fontSize: 14,
-                fontWeight: 700,
-                minHeight: 40,
-                padding: "8px 16px",
+                fontWeight: designTokens.typography.fontWeight.bold,
+                minHeight: designTokens.space.xs * 10,
+                padding: `${designTokens.space.sm}px ${designTokens.space.lg}px`,
               }}
               type="button"
             >

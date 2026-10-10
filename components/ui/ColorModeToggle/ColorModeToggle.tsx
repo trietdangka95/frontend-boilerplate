@@ -1,18 +1,17 @@
 "use client";
 
 import IconButton from "@mui/material/IconButton";
+import { useColorScheme } from "@mui/material/styles";
 import { Monitor, Moon, Sun } from "lucide-react";
 
-import { useUiStore } from "@/stores/use-ui-store";
-
 export function ColorModeToggle() {
-  const colorMode = useUiStore((state) => state.colorMode);
-  const setColorMode = useUiStore((state) => state.setColorMode);
+  const { mode, setMode } = useColorScheme();
+  const colorMode = mode ?? "system";
 
   const handleToggle = () => {
-    if (colorMode === "light") setColorMode("dark");
-    else if (colorMode === "dark") setColorMode("system");
-    else setColorMode("light");
+    if (colorMode === "light") setMode("dark");
+    else if (colorMode === "dark") setMode("system");
+    else setMode("light");
   };
 
   const getIcon = () => {
@@ -24,6 +23,7 @@ export function ColorModeToggle() {
   return (
     <IconButton
       aria-label={`Current mode is ${colorMode}. Click to change.`}
+      disabled={mode === undefined}
       onClick={handleToggle}
       sx={{ color: "text.secondary" }}
     >

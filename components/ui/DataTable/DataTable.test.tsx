@@ -1,16 +1,16 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import type { ColumnDef } from "@tanstack/react-table";
 import { describe, expect, it } from "vitest";
 
 import { DataTable } from "./DataTable";
+import type { DataTableColumnDef } from "./types";
 
 interface ProjectRow {
   name: string;
   owner: string;
 }
 
-const columns: Array<ColumnDef<ProjectRow>> = [
+const columns: Array<DataTableColumnDef<ProjectRow>> = [
   {
     accessorKey: "name",
     header: "Name",
@@ -18,6 +18,15 @@ const columns: Array<ColumnDef<ProjectRow>> = [
   {
     accessorKey: "owner",
     header: "Owner",
+  },
+];
+
+const columnsWithActions: Array<DataTableColumnDef<ProjectRow>> = [
+  ...columns,
+  {
+    enableSorting: false,
+    header: "Actions",
+    id: "actions",
   },
 ];
 
@@ -32,6 +41,13 @@ function getBodyRows() {
 }
 
 describe("DataTable", () => {
+  it("renders non-sortable headers without a disabled button", () => {
+    render(<DataTable columns={columnsWithActions} data={rows} />);
+
+    expect(screen.getByRole("columnheader", { name: "Actions" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Actions" })).not.toBeInTheDocument();
+  });
+
   it("sorts rows when a sortable header is clicked", async () => {
     const user = userEvent.setup();
 
@@ -52,6 +68,19 @@ describe("DataTable", () => {
 
     expect(screen.getByText("Alpha")).toBeInTheDocument();
     expect(screen.queryByText("Zeta")).not.toBeInTheDocument();
+  });
+
+  it("returns to the first page when filtering changes the row model", async () => {
+    const user = userEvent.setup();
+
+    render(<DataTable columns={columns} data={rows} initialPageSize={1} />);
+
+    await user.click(screen.getByRole("button", { name: "Go to next page" }));
+    expect(screen.getByText("Alpha")).toBeInTheDocument();
+
+    await user.type(screen.getByLabelText("Search table"), "zeta");
+
+    expect(screen.getByText("Zeta")).toBeInTheDocument();
   });
 
   it("paginates rows", async () => {

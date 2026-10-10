@@ -7,8 +7,13 @@ import {
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { AppApiError } from "./api-error";
-import { clearAccessToken, getAccessToken, setAccessToken } from "./auth-token";
+import { createAccessTokenStore } from "./auth-token";
 import { createApiClient } from "./api-client";
+
+const tokens = createAccessTokenStore();
+const setAccessToken = tokens.set;
+const getAccessToken = tokens.get;
+const clearAccessToken = () => tokens.set(null);
 
 function createResponse<TData>(
   config: InternalAxiosRequestConfig,
@@ -46,6 +51,39 @@ function rejectWithStatus<TData>(
 }
 
 describe("createApiClient", () => {
+  it("isolates credentials across client instances", async () => {
+    const firstTokens = createAccessTokenStore();
+    const secondTokens = createAccessTokenStore();
+    firstTokens.set("first-user");
+    secondTokens.set("second-user");
+    const adapter: AxiosAdapter = async (config) =>
+      createResponse(config, config.headers.get("Authorization") ?? null);
+    const first = createApiClient({ adapter, tokenStore: firstTokens });
+    const second = createApiClient({ adapter, tokenStore: secondTokens });
+    const anonymous = createApiClient({ adapter });
+    const responses = await Promise.all([
+      first.get("/me"),
+      second.get("/me"),
+      anonymous.get("/me"),
+    ]);
+    expect(responses.map((response) => response.data)).toEqual([
+      "Bearer first-user",
+      "Bearer second-user",
+      null,
+    ]);
+  });
+  it("does not trigger refresh for cookie-only authentication", async () => {
+    let attempts = 0;
+    const adapter: AxiosAdapter = async (config) => {
+      attempts += 1;
+      rejectWithStatus(config, 401, { error: { code: "UNAUTHENTICATED", message: "Sign in" } });
+    };
+    await expect(createApiClient({ adapter }).get("/me")).rejects.toMatchObject({
+      status: 401,
+      code: "UNAUTHENTICATED",
+    });
+    expect(attempts).toBe(1);
+  });
   afterEach(() => {
     clearAccessToken();
     vi.restoreAllMocks();
@@ -60,6 +98,7 @@ describe("createApiClient", () => {
     };
     const requestIdGenerator = vi.fn(() => "request-id-1");
     const apiClient = createApiClient({
+      tokenStore: tokens,
       adapter,
       baseURL: "https://api.example.com",
       requestIdGenerator,
@@ -95,6 +134,7 @@ describe("createApiClient", () => {
       );
     };
     const apiClient = createApiClient({
+      tokenStore: tokens,
       adapter,
       baseURL: "https://api.example.com",
       requestIdGenerator: () => "request-id-1",
@@ -131,6 +171,7 @@ describe("createApiClient", () => {
     };
     const refreshAccessToken = vi.fn(async () => "fresh-token");
     const apiClient = createApiClient({
+      tokenStore: tokens,
       adapter,
       baseURL: "https://api.example.com",
       refreshAccessToken,
@@ -169,6 +210,7 @@ describe("createApiClient", () => {
       return "fresh-token";
     });
     const apiClient = createApiClient({
+      tokenStore: tokens,
       adapter,
       baseURL: "https://api.example.com",
       refreshAccessToken,
@@ -202,6 +244,7 @@ describe("createApiClient", () => {
       });
     });
     const apiClient = createApiClient({
+      tokenStore: tokens,
       adapter,
       baseURL: "https://api.example.com",
       refreshAccessToken,

@@ -8,7 +8,7 @@ export function AppToastProvider() {
       position="top-right"
       toastOptions={{
         className:
-          "rounded-md border border-slate-200 bg-white px-4 py-3 text-sm text-slate-950 shadow-sm",
+          "rounded-md border border-default bg-surface px-4 py-3 text-sm text-foreground shadow-raised",
         duration: 4000,
       }}
     />

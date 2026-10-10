@@ -8,6 +8,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import { Menu } from "lucide-react";
 
+import { MAIN_CONTENT_ID } from "@/components/layout/SkipLink";
 import { useUiStore } from "@/stores/use-ui-store";
 import { designTokens } from "@/theme/tokens";
 
@@ -36,7 +37,7 @@ export function AppShell({
         elevation={0}
         position="fixed"
         sx={{
-          bgcolor: "var(--mui-palette-background-paper)",
+          bgcolor: "background.paper",
           borderBottom: 1,
           borderColor: "divider",
           color: "text.primary",
@@ -59,7 +60,11 @@ export function AppShell({
           >
             <Menu aria-hidden="true" size={20} strokeWidth={1.8} />
           </IconButton>
-          <Typography color="text.secondary" sx={{ flexGrow: 1, fontWeight: 600 }} variant="body2">
+          <Typography
+            color="text.secondary"
+            sx={{ flexGrow: 1, fontWeight: "fontWeightMedium" }}
+            variant="body2"
+          >
             {contextLabel}
           </Typography>
           {actions}
@@ -95,6 +100,7 @@ export function AppShell({
 
       <Box
         component="main"
+        id={MAIN_CONTENT_ID}
         sx={{
           flexGrow: 1,
           minWidth: 0,

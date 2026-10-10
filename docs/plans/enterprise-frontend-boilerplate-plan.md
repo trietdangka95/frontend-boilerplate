@@ -1,5 +1,7 @@
 # Implementation Plan: Enterprise Frontend Boilerplate
 
+> Historical scaffold plan. Its unchecked tasks describe the original proposal, not the current backlog. See [the hardening delivery record](boilerplate-hardening.md) and [README](../../README.md) for the current foundation and remaining application-specific integrations.
+
 Status: Review draft
 Spec: docs/specs/enterprise-frontend-boilerplate.md
 

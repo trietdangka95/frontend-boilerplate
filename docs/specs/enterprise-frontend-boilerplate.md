@@ -1,5 +1,7 @@
 # Spec: Enterprise Frontend Boilerplate
 
+> Historical scaffold proposal. Version lists and code samples below are not the current implementation contract. Use [README](../../README.md), [the design system](../design-system.md), [the stable TanStack contract](tanstack-stable-best-practices.md), and [ADR 0001](../adr/0001-auth-and-examples.md) for current behavior.
+
 Status: Review draft
 Date: 2026-07-08
 Repository: /Users/kadang/Documents/boilerplate-react

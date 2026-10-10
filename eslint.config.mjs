@@ -7,7 +7,16 @@ const queryRecommended = queryPlugin.configs["flat/recommended"];
 
 export default defineConfig([
   {
-    ignores: [".next/**", "coverage/**", "dist/**", "node_modules/**", "out/**", "next-env.d.ts"],
+    ignores: [
+      ".next/**",
+      "coverage/**",
+      "dist/**",
+      "node_modules/**",
+      "out/**",
+      "playwright-report/**",
+      "test-results/**",
+      "next-env.d.ts",
+    ],
   },
   ...nextCoreWebVitals,
   ...nextTypeScript,

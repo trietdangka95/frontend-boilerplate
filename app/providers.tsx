@@ -9,11 +9,12 @@ import { QueryProvider } from "@/providers/QueryProvider";
 
 interface AppProvidersProps {
   children: ReactNode;
+  nonce?: string;
 }
 
-export function AppProviders({ children }: AppProvidersProps) {
+export function AppProviders({ children, nonce }: AppProvidersProps) {
   return (
-    <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+    <AppRouterCacheProvider options={{ enableCssLayer: true, nonce }}>
       <MuiProvider>
         <QueryProvider>
           {children}

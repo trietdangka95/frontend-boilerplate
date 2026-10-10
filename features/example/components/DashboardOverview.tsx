@@ -107,12 +107,15 @@ export function DashboardOverview() {
                   key={swatch.label}
                   sx={{
                     bgcolor: swatch.color,
-                    color: Number(swatch.label) >= 600 ? "#ffffff" : "#0f172a",
+                    color:
+                      Number(swatch.label) >= 600
+                        ? designTokens.color.neutral[0]
+                        : designTokens.color.neutral[900],
                     minHeight: 88,
                     p: 3,
                   }}
                 >
-                  <Typography component="span" sx={{ fontSize: 11, fontWeight: 750 }}>
+                  <Typography component="span" sx={{ fontSize: 11, fontWeight: "fontWeightBold" }}>
                     {swatch.label}
                   </Typography>
                 </Box>
@@ -153,7 +156,7 @@ export function DashboardOverview() {
                 <Typography
                   sx={{
                     fontSize: { xs: 34, sm: 42 },
-                    fontWeight: 700,
+                    fontWeight: "fontWeightBold",
                     letterSpacing: "-0.045em",
                     lineHeight: 1.05,
                   }}

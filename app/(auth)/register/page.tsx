@@ -41,6 +41,7 @@ export default function RegisterPage() {
         sx={{ display: "flex", flexDirection: "column", gap: 3 }}
       >
         <InputField
+          autoComplete="name"
           control={control}
           fullWidth
           label="Name"
@@ -49,6 +50,7 @@ export default function RegisterPage() {
         />
 
         <InputField
+          autoComplete="email"
           control={control}
           fullWidth
           label="Email"
@@ -58,6 +60,7 @@ export default function RegisterPage() {
         />
 
         <InputField
+          autoComplete="new-password"
           control={control}
           fullWidth
           label="Password"
@@ -67,6 +70,7 @@ export default function RegisterPage() {
         />
 
         <InputField
+          autoComplete="new-password"
           control={control}
           fullWidth
           label="Confirm password"
@@ -88,7 +92,7 @@ export default function RegisterPage() {
             href="/login"
             sx={{
               color: "primary.main",
-              fontWeight: 600,
+              fontWeight: "fontWeightMedium",
               textDecoration: "none",
               "&:hover": { textDecoration: "underline" },
             }}

@@ -24,7 +24,7 @@ export function EmptyState({ action, description, icon, title }: EmptyStateProps
       }}
     >
       {icon ? (
-        <span className="grid size-10 place-items-center rounded-lg bg-teal-50 text-teal-700">
+        <span className="grid size-10 place-items-center rounded-lg bg-brand-subtle text-brand-strong">
           {icon}
         </span>
       ) : null}

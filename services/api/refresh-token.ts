@@ -1,4 +1,5 @@
 import axios, { type AxiosAdapter } from "axios";
+import { z } from "@/utils/zod";
 
 interface RefreshAccessTokenRequest {
   adapter?: AxiosAdapter;
@@ -7,12 +8,11 @@ interface RefreshAccessTokenRequest {
   timeout?: number;
 }
 
-interface RefreshTokenResponse {
-  accessToken?: string | null;
-  data?: {
-    accessToken?: string | null;
-  };
-}
+const tokenSchema = z.string().min(1).nullable().optional();
+const refreshResponseSchema = z.object({
+  accessToken: tokenSchema,
+  data: z.object({ accessToken: tokenSchema }).optional(),
+});
 
 export type RefreshAccessToken = () => Promise<string | null>;
 
@@ -35,7 +35,8 @@ export async function requestTokenRefresh({
     withCredentials: true,
   });
 
-  const response = await refreshClient.post<RefreshTokenResponse>(refreshEndpoint);
+  const response = await refreshClient.post<unknown>(refreshEndpoint);
+  const payload = refreshResponseSchema.parse(response.data);
 
-  return response.data.accessToken ?? response.data.data?.accessToken ?? null;
+  return payload.accessToken ?? payload.data?.accessToken ?? null;
 }

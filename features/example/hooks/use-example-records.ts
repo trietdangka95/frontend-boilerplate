@@ -2,16 +2,12 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { createExampleRecord, listExampleRecords } from "../services/example-records";
+import { exampleRecordKeys, exampleRecordsQueryOptions } from "../queries/example-records";
+import { createExampleRecord } from "../services/example-records";
 import type { ExampleRecord } from "../types";
 
-const exampleRecordsQueryKey = ["example-records"] as const;
-
 export function useExampleRecords() {
-  return useQuery({
-    queryFn: listExampleRecords,
-    queryKey: exampleRecordsQueryKey,
-  });
+  return useQuery(exampleRecordsQueryOptions());
 }
 
 export function useCreateExampleRecord() {
@@ -19,11 +15,18 @@ export function useCreateExampleRecord() {
 
   return useMutation({
     mutationFn: createExampleRecord,
-    onSuccess: (record) => {
-      queryClient.setQueryData<ExampleRecord[]>(exampleRecordsQueryKey, (current = []) => [
+    mutationKey: [...exampleRecordKeys.all, "create"],
+    onSuccess: async (record) => {
+      const listQuery = exampleRecordsQueryOptions();
+
+      queryClient.setQueryData<ExampleRecord[]>(listQuery.queryKey, (current = []) => [
         record,
         ...current.filter((item) => item.id !== record.id),
       ]);
+
+      // Reconcile the immediate cache update with the server-owned list.
+      // Source: https://tanstack.com/query/latest/docs/framework/react/guides/invalidations-from-mutations
+      await queryClient.invalidateQueries({ queryKey: exampleRecordKeys.all });
     },
   });
 }

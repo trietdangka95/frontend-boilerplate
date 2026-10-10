@@ -10,7 +10,7 @@ export function RecordDetails({ record }: { record: ExampleRecord }) {
   return (
     <Box component="dl" sx={{ display: "grid", gap: 4, m: 0 }}>
       <Box>
-        <Typography component="dt" sx={{ fontWeight: 700 }} variant="body2">
+        <Typography component="dt" sx={{ fontWeight: "fontWeightBold" }} variant="body2">
           Owner
         </Typography>
         <Typography component="dd" color="text.secondary" sx={{ m: 0, mt: 1 }} variant="body2">
@@ -18,7 +18,7 @@ export function RecordDetails({ record }: { record: ExampleRecord }) {
         </Typography>
       </Box>
       <Box>
-        <Typography component="dt" sx={{ fontWeight: 700 }} variant="body2">
+        <Typography component="dt" sx={{ fontWeight: "fontWeightBold" }} variant="body2">
           Status
         </Typography>
         <Box component="dd" sx={{ m: 0, mt: 1 }}>
@@ -26,7 +26,7 @@ export function RecordDetails({ record }: { record: ExampleRecord }) {
         </Box>
       </Box>
       <Box>
-        <Typography component="dt" sx={{ fontWeight: 700 }} variant="body2">
+        <Typography component="dt" sx={{ fontWeight: "fontWeightBold" }} variant="body2">
           Created
         </Typography>
         <Typography component="dd" color="text.secondary" sx={{ m: 0, mt: 1 }} variant="body2">

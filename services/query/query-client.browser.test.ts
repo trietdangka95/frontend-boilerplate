@@ -14,6 +14,5 @@ describe("query client in the browser", () => {
     expect(defaults?.staleTime).toBe(60 * 1000);
     expect(defaults?.gcTime).toBe(5 * 60 * 1000);
     expect(defaults?.retry).toBe(1);
-    expect(defaults?.refetchOnWindowFocus).toBe(false);
   });
 });

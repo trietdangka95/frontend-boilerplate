@@ -2,12 +2,16 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 
 import { Button } from "@/components/ui/Button";
+import { MAIN_CONTENT_ID } from "@/components/layout/SkipLink";
 
 export default function NotFoundPage() {
   return (
-    <main className="flex min-h-[100dvh] items-center justify-center bg-slate-50 px-4 py-12 text-slate-950 sm:px-6">
+    <main
+      className="flex min-h-dvh items-center justify-center bg-canvas px-4 py-12 text-foreground sm:px-6"
+      id={MAIN_CONTENT_ID}
+    >
       <Paper className="w-full max-w-xl p-6 sm:p-8" component="section" variant="outlined">
-        <Typography color="primary.main" sx={{ fontWeight: 750 }} variant="body2">
+        <Typography color="primary.main" sx={{ fontWeight: "fontWeightBold" }} variant="body2">
           Error 404
         </Typography>
         <Typography component="h1" sx={{ mt: 2 }} variant="h2">

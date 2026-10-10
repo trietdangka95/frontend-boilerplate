@@ -1,2 +1,3 @@
+export { createDataTableColumnHelper } from "./column-helper";
 export { DataTable } from "./DataTable";
-export type { DataTableProps } from "./types";
+export type { DataTableColumnDef, DataTableProps } from "./types";

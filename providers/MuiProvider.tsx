@@ -12,7 +12,7 @@ interface MuiProviderProps {
 
 export function MuiProvider({ children }: MuiProviderProps) {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider defaultMode="system" theme={theme}>
       <CssBaseline />
       {children}
     </ThemeProvider>

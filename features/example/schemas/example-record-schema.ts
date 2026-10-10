@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/utils/zod";
 
 export const exampleRecordSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters"),

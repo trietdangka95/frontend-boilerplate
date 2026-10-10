@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+import { appToast as toast } from "@/components/common/AppToast";
 
 import { normalizeApiError } from "@/services/api/api-error";
 
@@ -15,7 +15,7 @@ export function useLogin() {
     onSuccess: () => {
       // Invalidate queries that might depend on auth state
       queryClient.clear();
-      router.push("/");
+      router.push("/examples/private");
       toast.success("Successfully logged in");
     },
     onError: (error) => {

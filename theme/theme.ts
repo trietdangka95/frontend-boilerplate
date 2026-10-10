@@ -1,10 +1,11 @@
 import { createTheme } from "@mui/material/styles";
 
-import { designTokens } from "./tokens";
+import { appThemeTokens, designTokens } from "./tokens";
 
-const { brand, neutral, darkNeutral } = designTokens.color;
+const { dark: darkColors, light: lightColors } = designTokens.color.semantic;
 
 export const theme = createTheme({
+  app: appThemeTokens,
   breakpoints: {
     values: {
       xs: 0,
@@ -17,10 +18,10 @@ export const theme = createTheme({
   components: {
     MuiAlert: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
           alignItems: "center",
-          borderRadius: designTokens.radius.md,
-        },
+          borderRadius: theme.vars.app.radius.md,
+        }),
       },
     },
     MuiButton: {
@@ -28,39 +29,39 @@ export const theme = createTheme({
         disableElevation: true,
       },
       styleOverrides: {
-        root: {
-          borderRadius: designTokens.radius.md,
-          fontWeight: 650,
-          minHeight: 40,
-          paddingInline: 16,
+        root: ({ theme }) => ({
+          borderRadius: theme.vars.app.radius.md,
+          fontWeight: designTokens.typography.fontWeight.semibold,
+          minHeight: theme.spacing(10),
+          paddingInline: theme.spacing(4),
           textTransform: "none",
-          transition: `background-color ${designTokens.motion.durationFast} ${designTokens.motion.easing}, border-color ${designTokens.motion.durationFast} ${designTokens.motion.easing}, color ${designTokens.motion.durationFast} ${designTokens.motion.easing}, transform ${designTokens.motion.durationFast} ${designTokens.motion.easing}`,
+          transition: `background-color ${theme.vars.app.motion.durationFast} ${theme.vars.app.motion.easing}, border-color ${theme.vars.app.motion.durationFast} ${theme.vars.app.motion.easing}, color ${theme.vars.app.motion.durationFast} ${theme.vars.app.motion.easing}, transform ${theme.vars.app.motion.durationFast} ${theme.vars.app.motion.easing}`,
           "&:active": {
             transform: "translateY(1px) scale(0.99)",
           },
           "&:focus-visible": {
-            boxShadow: designTokens.shadow.focus,
+            boxShadow: theme.vars.app.shadow.focus,
             outline: "none",
           },
-        },
-        sizeLarge: {
-          minHeight: 48,
-          paddingInline: 20,
-        },
-        sizeSmall: {
-          minHeight: 34,
-          paddingInline: 12,
-        },
+        }),
+        sizeLarge: ({ theme }) => ({
+          minHeight: theme.spacing(12),
+          paddingInline: theme.spacing(5),
+        }),
+        sizeSmall: ({ theme }) => ({
+          minHeight: theme.spacing(8.5),
+          paddingInline: theme.spacing(3),
+        }),
       },
     },
     MuiCheckbox: {
       styleOverrides: {
-        root: {
-          borderRadius: designTokens.radius.sm,
+        root: ({ theme }) => ({
+          borderRadius: theme.vars.app.radius.sm,
           "&:focus-visible": {
-            boxShadow: designTokens.shadow.focus,
+            boxShadow: theme.vars.app.shadow.focus,
           },
-        },
+        }),
       },
     },
     MuiChip: {
@@ -68,65 +69,65 @@ export const theme = createTheme({
         size: "small",
       },
       styleOverrides: {
-        root: {
-          borderRadius: designTokens.radius.full,
+        root: ({ theme }) => ({
+          borderRadius: theme.vars.app.radius.full,
           fontSize: "0.75rem",
-          fontWeight: 650,
-          height: 26,
-        },
+          fontWeight: designTokens.typography.fontWeight.semibold,
+          height: theme.spacing(6.5),
+        }),
       },
     },
     MuiDialog: {
       styleOverrides: {
-        paper: {
-          border: `1px solid ${neutral[200]}`,
-          borderRadius: designTokens.radius.lg,
-          boxShadow: designTokens.shadow.raised,
-        },
+        paper: ({ theme }) => ({
+          border: `1px solid ${theme.vars.palette.divider}`,
+          borderRadius: theme.vars.app.radius.lg,
+          boxShadow: theme.vars.app.shadow.raised,
+        }),
       },
     },
     MuiIconButton: {
       styleOverrides: {
-        root: {
-          borderRadius: designTokens.radius.md,
-          transition: `background-color ${designTokens.motion.durationFast} ${designTokens.motion.easing}, transform ${designTokens.motion.durationFast} ${designTokens.motion.easing}`,
+        root: ({ theme }) => ({
+          borderRadius: theme.vars.app.radius.md,
+          transition: `background-color ${theme.vars.app.motion.durationFast} ${theme.vars.app.motion.easing}, transform ${theme.vars.app.motion.durationFast} ${theme.vars.app.motion.easing}`,
           "&:active": {
             transform: "scale(0.96)",
           },
           "&:focus-visible": {
-            boxShadow: designTokens.shadow.focus,
+            boxShadow: theme.vars.app.shadow.focus,
           },
-        },
+        }),
       },
     },
     MuiInputLabel: {
       styleOverrides: {
-        root: {
-          fontWeight: 550,
+        root: ({ theme }) => ({
+          fontWeight: designTokens.typography.fontWeight.medium,
           "&.MuiInputLabel-outlined.MuiInputLabel-shrink": {
-            backgroundColor: neutral[0],
-            paddingInline: 4,
+            backgroundColor: theme.vars.palette.background.paper,
+            paddingInline: theme.spacing(1),
             transform: "translate(11px, -9px) scale(0.75)",
           },
           "&.MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
             transform: "translate(14px, 11px) scale(1)",
           },
-        },
+        }),
       },
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: {
-          borderRadius: designTokens.radius.md,
-          backgroundColor: neutral[0],
-          transition: `box-shadow ${designTokens.motion.durationFast} ${designTokens.motion.easing}`,
+        root: ({ theme }) => ({
+          borderRadius: theme.vars.app.radius.md,
+          backgroundColor: theme.vars.palette.background.paper,
+          transition: `box-shadow ${theme.vars.app.motion.durationFast} ${theme.vars.app.motion.easing}`,
           "&.Mui-focused": {
-            boxShadow: designTokens.shadow.focus,
+            boxShadow: theme.vars.app.shadow.focus,
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             borderWidth: 1,
           },
-        },
+        }),
         input: {
           paddingBlock: 11.5,
         },
@@ -137,40 +138,40 @@ export const theme = createTheme({
         elevation: 0,
       },
       styleOverrides: {
-        rounded: {
-          borderRadius: designTokens.radius.lg,
-        },
+        rounded: ({ theme }) => ({
+          borderRadius: theme.vars.app.radius.lg,
+        }),
       },
     },
     MuiTableCell: {
       styleOverrides: {
-        head: {
-          color: neutral[600],
+        head: ({ theme }) => ({
+          color: theme.vars.palette.text.secondary,
           fontSize: "0.75rem",
-          fontWeight: 700,
+          fontWeight: designTokens.typography.fontWeight.bold,
           letterSpacing: "0.04em",
           textTransform: "uppercase",
-        },
-        root: {
-          borderColor: neutral[200],
-          padding: "14px 16px",
-        },
+        }),
+        root: ({ theme }) => ({
+          borderColor: theme.vars.palette.divider,
+          padding: theme.spacing(3.5, 4),
+        }),
       },
     },
     MuiTableRow: {
       styleOverrides: {
-        root: {
-          transition: `background-color ${designTokens.motion.durationFast} ${designTokens.motion.easing}`,
-        },
+        root: ({ theme }) => ({
+          transition: `background-color ${theme.vars.app.motion.durationFast} ${theme.vars.app.motion.easing}`,
+        }),
       },
     },
     MuiTooltip: {
       styleOverrides: {
-        tooltip: {
-          borderRadius: designTokens.radius.sm,
+        tooltip: ({ theme }) => ({
+          borderRadius: theme.vars.app.radius.sm,
           fontSize: "0.75rem",
-          padding: "6px 10px",
-        },
+          padding: theme.spacing(1.5, 2.5),
+        }),
       },
     },
   },
@@ -178,85 +179,71 @@ export const theme = createTheme({
   colorSchemes: {
     light: {
       palette: {
-        action: {
-          active: neutral[600],
-          hover: "rgba(15, 23, 42, 0.05)",
-          selected: "rgba(13, 118, 110, 0.10)",
-        },
+        action: lightColors.action,
         background: {
-          default: neutral[50],
-          paper: neutral[0],
+          default: lightColors.background.canvas,
+          paper: lightColors.background.surface,
         },
-        divider: neutral[200],
+        divider: lightColors.border,
         error: {
-          main: "#b42318",
+          main: lightColors.error,
         },
         info: {
-          main: "#2563a8",
+          main: lightColors.info,
         },
         primary: {
-          contrastText: neutral[0],
-          dark: brand[700],
-          light: brand[100],
-          main: brand[600],
+          contrastText: lightColors.primary.contrast,
+          dark: lightColors.primary.dark,
+          light: lightColors.primary.light,
+          main: lightColors.primary.main,
         },
         secondary: {
-          contrastText: neutral[0],
-          dark: neutral[900],
-          light: neutral[600],
-          main: neutral[800],
+          contrastText: lightColors.secondary.contrast,
+          dark: lightColors.secondary.dark,
+          light: lightColors.secondary.light,
+          main: lightColors.secondary.main,
         },
         success: {
-          main: "#287a4b",
+          main: lightColors.success,
         },
-        text: {
-          primary: neutral[900],
-          secondary: neutral[600],
-        },
+        text: lightColors.text,
         warning: {
-          main: "#a15c07",
+          main: lightColors.warning,
         },
       },
     },
     dark: {
       palette: {
-        action: {
-          active: darkNeutral[600],
-          hover: "rgba(255, 255, 255, 0.05)",
-          selected: "rgba(13, 118, 110, 0.20)",
-        },
+        action: darkColors.action,
         background: {
-          default: darkNeutral[50],
-          paper: darkNeutral[0],
+          default: darkColors.background.canvas,
+          paper: darkColors.background.surface,
         },
-        divider: darkNeutral[200],
+        divider: darkColors.border,
         error: {
-          main: "#f04438",
+          main: darkColors.error,
         },
         info: {
-          main: "#53b1fd",
+          main: darkColors.info,
         },
         primary: {
-          contrastText: darkNeutral[950],
-          dark: brand[500],
-          light: brand[800],
-          main: brand[400],
+          contrastText: darkColors.primary.contrast,
+          dark: darkColors.primary.dark,
+          light: darkColors.primary.light,
+          main: darkColors.primary.main,
         },
         secondary: {
-          contrastText: darkNeutral[950],
-          dark: darkNeutral[100],
-          light: darkNeutral[400],
-          main: darkNeutral[200],
+          contrastText: darkColors.secondary.contrast,
+          dark: darkColors.secondary.dark,
+          light: darkColors.secondary.light,
+          main: darkColors.secondary.main,
         },
         success: {
-          main: "#32d583",
+          main: darkColors.success,
         },
-        text: {
-          primary: darkNeutral[900],
-          secondary: darkNeutral[600],
-        },
+        text: darkColors.text,
         warning: {
-          main: "#fec84b",
+          main: darkColors.warning,
         },
       },
     },
@@ -264,7 +251,7 @@ export const theme = createTheme({
   shape: {
     borderRadius: designTokens.radius.md,
   },
-  spacing: 4,
+  spacing: designTokens.space.unit,
   typography: {
     body1: {
       fontSize: "1rem",
@@ -275,44 +262,43 @@ export const theme = createTheme({
       lineHeight: 1.55,
     },
     button: {
-      fontWeight: 650,
+      fontWeight: designTokens.typography.fontWeight.semibold,
     },
     caption: {
       fontSize: "0.75rem",
       lineHeight: 1.5,
     },
-    fontFamily:
-      '"Avenir Next", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
-    fontWeightBold: 700,
-    fontWeightMedium: 600,
-    fontWeightRegular: 450,
+    fontFamily: designTokens.typography.fontFamily,
+    fontWeightBold: designTokens.typography.fontWeight.bold,
+    fontWeightMedium: designTokens.typography.fontWeight.medium,
+    fontWeightRegular: designTokens.typography.fontWeight.regular,
     h1: {
       fontSize: "clamp(2.25rem, 5vw, 4rem)",
-      fontWeight: 700,
+      fontWeight: designTokens.typography.fontWeight.bold,
       letterSpacing: "-0.045em",
       lineHeight: 1.04,
     },
     h2: {
       fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
-      fontWeight: 700,
+      fontWeight: designTokens.typography.fontWeight.bold,
       letterSpacing: "-0.035em",
       lineHeight: 1.12,
     },
     h3: {
       fontSize: "clamp(1.25rem, 2vw, 1.5rem)",
-      fontWeight: 650,
+      fontWeight: designTokens.typography.fontWeight.semibold,
       letterSpacing: "-0.025em",
       lineHeight: 1.25,
     },
     h4: {
       fontSize: "1.125rem",
-      fontWeight: 650,
+      fontWeight: designTokens.typography.fontWeight.semibold,
       letterSpacing: "-0.015em",
       lineHeight: 1.35,
     },
     subtitle1: {
       fontSize: "1rem",
-      fontWeight: 650,
+      fontWeight: designTokens.typography.fontWeight.semibold,
       lineHeight: 1.45,
     },
   },

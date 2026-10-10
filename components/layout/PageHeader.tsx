@@ -19,7 +19,11 @@ export function PageHeader({ actions, description, eyebrow, title }: PageHeaderP
     >
       <Box sx={{ maxWidth: 720 }}>
         {eyebrow ? (
-          <Typography color="primary.main" sx={{ fontWeight: 750, mb: 2 }} variant="body2">
+          <Typography
+            color="primary.main"
+            sx={{ fontWeight: "fontWeightBold", mb: 2 }}
+            variant="body2"
+          >
             {eyebrow}
           </Typography>
         ) : null}

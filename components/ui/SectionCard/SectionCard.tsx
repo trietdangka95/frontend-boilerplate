@@ -22,7 +22,7 @@ export function SectionCardHeader({
   return (
     <Box
       className={cn(
-        "flex items-start justify-between gap-4 border-b border-slate-200 px-5 py-4 sm:px-6",
+        "flex items-start justify-between gap-4 border-b border-default px-5 py-4 sm:px-6",
         className,
       )}
       {...props}
@@ -59,7 +59,7 @@ export function SectionCardContent({ className, ...props }: BoxProps) {
 export function SectionCardFooter({ className, ...props }: BoxProps) {
   return (
     <Box
-      className={cn("border-t border-slate-200 bg-slate-50/70 px-5 py-4 sm:px-6", className)}
+      className={cn("border-t border-default bg-surface-subtle px-5 py-4 sm:px-6", className)}
       {...props}
     />
   );

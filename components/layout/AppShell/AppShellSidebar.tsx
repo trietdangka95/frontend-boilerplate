@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -22,34 +23,42 @@ function Navigation({
     <Box aria-label="Primary navigation" component="nav" sx={{ px: 3, py: 4 }}>
       <List disablePadding sx={{ display: "grid", gap: 1 }}>
         {items.map((item) => (
-          <ListItemButton
-            aria-current={item.active ? "page" : undefined}
-            component={Link}
-            href={item.href}
-            key={item.href}
-            onClick={onNavigate}
-            selected={item.active}
-            sx={{
-              borderRadius: 2.5,
-              minHeight: 44,
-              px: 3,
-              "&.Mui-selected": {
-                color: "primary.dark",
-                "& .MuiListItemIcon-root": { color: "primary.main" },
-              },
-            }}
-          >
-            {item.icon ? (
-              <ListItemIcon sx={{ color: "text.secondary", minWidth: 36 }}>
-                {item.icon}
-              </ListItemIcon>
-            ) : null}
-            <ListItemText
-              primary={item.label}
-              slotProps={{ primary: { sx: { fontSize: 14, fontWeight: item.active ? 700 : 550 } } }}
-            />
-            {item.trailing}
-          </ListItemButton>
+          <ListItem disablePadding key={item.href}>
+            <ListItemButton
+              aria-current={item.active ? "page" : undefined}
+              component={Link}
+              href={item.href}
+              onClick={onNavigate}
+              selected={item.active}
+              sx={{
+                borderRadius: 2.5,
+                minHeight: 44,
+                px: 3,
+                "&.Mui-selected": {
+                  color: "primary.dark",
+                  "& .MuiListItemIcon-root": { color: "primary.main" },
+                },
+              }}
+            >
+              {item.icon ? (
+                <ListItemIcon sx={{ color: "text.secondary", minWidth: 36 }}>
+                  {item.icon}
+                </ListItemIcon>
+              ) : null}
+              <ListItemText
+                primary={item.label}
+                slotProps={{
+                  primary: {
+                    sx: {
+                      fontSize: 14,
+                      fontWeight: item.active ? "fontWeightBold" : "fontWeightMedium",
+                    },
+                  },
+                }}
+              />
+              {item.trailing}
+            </ListItemButton>
+          </ListItem>
         ))}
       </List>
     </Box>
@@ -74,7 +83,7 @@ export function AppShellSidebar({
             color: "primary.contrastText",
             display: "flex",
             fontSize: 13,
-            fontWeight: 800,
+            fontWeight: "fontWeightBold",
             height: 34,
             justifyContent: "center",
             letterSpacing: "-0.03em",

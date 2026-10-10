@@ -11,36 +11,36 @@ import { RecordWorkspace } from "./RecordWorkspace";
 
 const iconProps = { size: 19, strokeWidth: 1.8 } as const;
 
-export function ExampleDashboard() {
+export function ExampleDashboard({ showDemoAuth = false }: { showDemoAuth?: boolean }) {
   return (
     <AppShell
-      actions={<DashboardTopbarActions />}
+      actions={<DashboardTopbarActions showDemoAuth={showDemoAuth} />}
       brand="Northstar UI"
       contextLabel="Design system / Overview"
       navigation={[
         {
           active: true,
-          href: "/",
+          href: "/examples",
           icon: <LayoutDashboard aria-hidden="true" {...iconProps} />,
           label: "Overview",
         },
         {
-          href: "/#foundation",
+          href: "/examples#foundation",
           icon: <Palette aria-hidden="true" {...iconProps} />,
           label: "Foundation",
         },
         {
-          href: "/#components",
+          href: "/examples#components",
           icon: <Blocks aria-hidden="true" {...iconProps} />,
           label: "Components",
         },
         {
-          href: "/#records",
+          href: "/examples#records",
           icon: <TableProperties aria-hidden="true" {...iconProps} />,
           label: "Data patterns",
         },
         {
-          href: "/#settings",
+          href: "/examples#settings",
           icon: <Settings aria-hidden="true" {...iconProps} />,
           label: "Settings",
         },
@@ -48,7 +48,7 @@ export function ExampleDashboard() {
       sidebarFooter={
         <div className="space-y-2 px-2">
           <StatusChip label="Foundation ready" tone="success" />
-          <p className="text-xs leading-5 text-slate-500">MUI v9 · Tailwind v4 · Next.js 16</p>
+          <p className="text-xs leading-5 text-muted">MUI v9 · Tailwind v4 · Next.js 16</p>
         </div>
       }
     >
@@ -57,6 +57,9 @@ export function ExampleDashboard() {
           <PageHeader
             actions={
               <>
+                <Button href="#loading-examples" variant="outline">
+                  Loading &amp; skeleton
+                </Button>
                 <Button href="#foundation" variant="outline">
                   View tokens
                 </Button>
@@ -68,7 +71,7 @@ export function ExampleDashboard() {
                 </Button>
               </>
             }
-            description="A production-ready reference for color, typography, responsive layout, form validation, server state, and data-heavy application patterns."
+            description="Interactive examples for layout, forms, and data tables. Records are local demo data and reset when you reload."
             eyebrow="Enterprise frontend boilerplate"
             title="Example workspace"
           />

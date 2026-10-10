@@ -1,6 +1,7 @@
 "use client";
 
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { Bell, Pencil, Settings2, Trash2 } from "lucide-react";
@@ -56,6 +57,45 @@ export function ComponentShowcase() {
           mt: 7,
         }}
       >
+        <SectionCard className="scroll-mt-24" id="loading-examples">
+          <SectionCardHeader>
+            <Box>
+              <SectionCardTitle component="h3">Loading & skeleton</SectionCardTitle>
+              <SectionCardDescription>
+                Preview loading indicators here at any time, even when content is already cached.
+              </SectionCardDescription>
+            </Box>
+          </SectionCardHeader>
+          <SectionCardContent>
+            <Stack spacing={7}>
+              <Stack direction="row" spacing={3} sx={{ alignItems: "center" }}>
+                <CircularProgress aria-label="Loading preview" />
+                <Typography variant="body2">Loading content…</Typography>
+              </Stack>
+              <Button className="w-fit" isLoading>
+                Saving changes
+              </Button>
+              <Box>
+                <Typography component="h4" sx={{ mb: 3 }} variant="subtitle2">
+                  Content skeleton
+                </Typography>
+                <LoadingState label="Loading report preview" lines={4} />
+              </Box>
+              <Pagination
+                count={7}
+                onChange={(_, nextPage) => setPage(nextPage)}
+                page={page}
+                siblingCount={0}
+              />
+            </Stack>
+          </SectionCardContent>
+          <SectionCardFooter>
+            <Typography color="text.secondary" variant="caption">
+              Showing standalone pagination state: page {page} of 7.
+            </Typography>
+          </SectionCardFooter>
+        </SectionCard>
+
         <SectionCard>
           <SectionCardHeader
             action={
@@ -194,33 +234,6 @@ export function ComponentShowcase() {
               />
             </Stack>
           </SectionCardContent>
-        </SectionCard>
-
-        <SectionCard>
-          <SectionCardHeader>
-            <Box>
-              <SectionCardTitle component="h3">Loading & pagination</SectionCardTitle>
-              <SectionCardDescription>
-                Shared placeholders and standalone page navigation for async content.
-              </SectionCardDescription>
-            </Box>
-          </SectionCardHeader>
-          <SectionCardContent>
-            <Stack spacing={7}>
-              <LoadingState label="Loading report preview" lines={4} />
-              <Pagination
-                count={7}
-                onChange={(_, nextPage) => setPage(nextPage)}
-                page={page}
-                siblingCount={0}
-              />
-            </Stack>
-          </SectionCardContent>
-          <SectionCardFooter>
-            <Typography color="text.secondary" variant="caption">
-              Showing standalone pagination state: page {page} of 7.
-            </Typography>
-          </SectionCardFooter>
         </SectionCard>
       </Box>
 
